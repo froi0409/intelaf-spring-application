@@ -1,7 +1,9 @@
 package com.ayd2.intelafbackend.dto.store;
 
 import com.ayd2.intelafbackend.entities.store.Store;
+import lombok.Value;
 
+@Value
 public class StoreResponseDTO {
 
     String idStore;
