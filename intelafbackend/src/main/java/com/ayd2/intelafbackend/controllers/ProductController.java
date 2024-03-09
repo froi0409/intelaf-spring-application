@@ -1,0 +1,59 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package com.ayd2.intelafbackend.controllers;
+
+import com.ayd2.intelafbackend.dto.products.ProductRequestDTO;
+import com.ayd2.intelafbackend.dto.products.ProductResponseDTO;
+import com.ayd2.intelafbackend.services.ProductService;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+/**
+ *
+ * @author waliray
+ */
+@RestController
+@RequestMapping("/v1/products")
+public class ProductController {
+    private ProductService productService;
+    
+    @Autowired
+    public ProductController(ProductService ProductService) {
+        this.productService = ProductService;
+    } 
+    
+    @PostMapping("/create-product")
+    public ResponseEntity<ProductResponseDTO> createProduct(@RequestBody ProductRequestDTO newProduct) {
+        ProductResponseDTO responseDTO = productService.createProduct(newProduct);
+        
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(responseDTO);
+    }
+    
+    @GetMapping("/get-all-products")
+    public ResponseEntity<List<ProductResponseDTO>> findAllProducts() {
+        return ResponseEntity.ok(productService.findAll());
+    }
+     
+    @PutMapping("/update-product/{id}")
+    public ResponseEntity<ProductResponseDTO> updateProduct(@PathVariable("id") String id, @RequestBody ProductRequestDTO updatedProduct) {
+        ProductResponseDTO responseDTO = productService.updateProduct(id, updatedProduct);
+        if (responseDTO != null) {
+            return ResponseEntity.ok(responseDTO);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+}
