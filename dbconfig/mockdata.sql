@@ -45,12 +45,12 @@ insert into `intelafdb`.`employee` (`id_user`, `role`) values (2, 'employee');
 insert into `intelafdb`.`employee` (`id_user`, `role`) values (3, 'employee');
 insert into `intelafdb`.`employee` (`id_user`, `role`) values (4, 'employee');
 
-insert into `intelafdb`.`client` (`user_id_user`, `credit`) values (5, 500.00);
-insert into `intelafdb`.`client` (`user_id_user`, `credit`) values (6, 0);
-insert into `intelafdb`.`client` (`user_id_user`, `credit`) values (7, 10.00);
-insert into `intelafdb`.`client` (`user_id_user`, `credit`) values (8, 14.00);
-insert into `intelafdb`.`client` (`user_id_user`, `credit`) values (9, 71.00);
-insert into `intelafdb`.`client` (`user_id_user`, `credit`) values (10, 0);
+insert into `intelafdb`.`customer` (`user_id_user`, `credit`) values (5, 500.00);
+insert into `intelafdb`.`customer` (`user_id_user`, `credit`) values (6, 0);
+insert into `intelafdb`.`customer` (`user_id_user`, `credit`) values (7, 10.00);
+insert into `intelafdb`.`customer` (`user_id_user`, `credit`) values (8, 14.00);
+insert into `intelafdb`.`customer` (`user_id_user`, `credit`) values (9, 71.00);
+insert into `intelafdb`.`customer` (`user_id_user`, `credit`) values (10, 0);
 
 INSERT INTO `intelafdb`.`store_has_product` (`store_id_store`, `product_id_product`, `stock`) values ('STR-1', 'PR-1', 50);
 INSERT INTO `intelafdb`.`store_has_product` (`store_id_store`, `product_id_product`, `stock`) values ('STR-2', 'PR-1', 1);
@@ -69,17 +69,17 @@ INSERT INTO `intelafdb`.`store_has_product` (`store_id_store`, `product_id_produ
 INSERT INTO `intelafdb`.`store_has_product` (`store_id_store`, `product_id_product`, `stock`) values ('STR-5', 'PR-11', 84);
 INSERT INTO `intelafdb`.`store_has_product` (`store_id_store`, `product_id_product`, `stock`) values ('STR-6', 'PR-12', 62);
 
-insert into `intelafdb`.`sale` (`id_sale`, `date`, `total`, `id_client`) values ('101','2024-03-05 12:00:00', 150.00, 5);
-insert into `intelafdb`.`sale` (`id_sale`, `date`, `total`, `id_client`) values ('102','2024-03-06 14:30:00', 200.00, 6);
-insert into `intelafdb`.`sale` (`id_sale`, `date`, `total`, `id_client`) values ('103','2024-03-06 14:35:00', 50.00, 7);
-insert into `intelafdb`.`sale` (`id_sale`, `date`, `total`, `id_client`) values ('104','2024-03-07 10:45:00', 20.00, 9);
-insert into `intelafdb`.`sale` (`id_sale`, `date`, `total`, `id_client`) values ('105','2024-03-07 12:45:00', 30.00, 6);
-insert into `intelafdb`.`sale` (`id_sale`, `date`, `total`, `id_client`) values ('106','2024-03-07 13:30:00', 150.00, 7);
-insert into `intelafdb`.`sale` (`id_sale`, `date`, `total`, `id_client`) values ('107','2024-03-08 15:45:00', 170.00, 8);
-insert into `intelafdb`.`sale` (`id_sale`, `date`, `total`, `id_client`) values ('108','2024-03-08 16:12:00', 10.00, 9);
-insert into `intelafdb`.`sale` (`id_sale`, `date`, `total`, `id_client`) values ('109','2024-03-08 17:23:00', 50.00, 5);
-insert into `intelafdb`.`sale` (`id_sale`, `date`, `total`, `id_client`) values ('110','2024-03-09 12:54:00', 150.00, 9);
-insert into `intelafdb`.`sale` (`id_sale`, `date`, `total`, `id_client`) values ('111','2024-03-10 13:34:00', 20.00, 10);
+insert into `intelafdb`.`sale` (`id_sale`, `date`, `total`, `id_customer`) values ('101','2024-03-05 12:00:00', 150.00, 5);
+insert into `intelafdb`.`sale` (`id_sale`, `date`, `total`, `id_customer`) values ('102','2024-03-06 14:30:00', 200.00, 6);
+insert into `intelafdb`.`sale` (`id_sale`, `date`, `total`, `id_customer`) values ('103','2024-03-06 14:35:00', 50.00, 7);
+insert into `intelafdb`.`sale` (`id_sale`, `date`, `total`, `id_customer`) values ('104','2024-03-07 10:45:00', 20.00, 9);
+insert into `intelafdb`.`sale` (`id_sale`, `date`, `total`, `id_customer`) values ('105','2024-03-07 12:45:00', 30.00, 6);
+insert into `intelafdb`.`sale` (`id_sale`, `date`, `total`, `id_customer`) values ('106','2024-03-07 13:30:00', 150.00, 7);
+insert into `intelafdb`.`sale` (`id_sale`, `date`, `total`, `id_customer`) values ('107','2024-03-08 15:45:00', 170.00, 8);
+insert into `intelafdb`.`sale` (`id_sale`, `date`, `total`, `id_customer`) values ('108','2024-03-08 16:12:00', 10.00, 9);
+insert into `intelafdb`.`sale` (`id_sale`, `date`, `total`, `id_customer`) values ('109','2024-03-08 17:23:00', 50.00, 5);
+insert into `intelafdb`.`sale` (`id_sale`, `date`, `total`, `id_customer`) values ('110','2024-03-09 12:54:00', 150.00, 9);
+insert into `intelafdb`.`sale` (`id_sale`, `date`, `total`, `id_customer`) values ('111','2024-03-10 13:34:00', 20.00, 10);
 
 insert into `intelafdb`.`payment_sale` (`sale_id_sale`, `type`, `amount`) values (101, 'cash', 150.00);
 insert into `intelafdb`.`payment_sale` (`sale_id_sale`, `type`, `amount`) values (102, 'cash', 100.00);

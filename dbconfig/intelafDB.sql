@@ -115,15 +115,15 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `intelafdb`.`client`
+-- Table `intelafdb`.`customer`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `intelafdb`.`client` ;
+DROP TABLE IF EXISTS `intelafdb`.`customer` ;
 
-CREATE TABLE IF NOT EXISTS `intelafdb`.`client` (
+CREATE TABLE IF NOT EXISTS `intelafdb`.`customer` (
   `user_id_user` INT NOT NULL,
   `credit` DECIMAL NULL,
   PRIMARY KEY (`user_id_user`),
-  CONSTRAINT `fk_client_user1`
+  CONSTRAINT `fk_customer_user1`
     FOREIGN KEY (`user_id_user`)
     REFERENCES `intelafdb`.`user` (`id_user`)
     ON DELETE NO ACTION
@@ -165,12 +165,12 @@ CREATE TABLE IF NOT EXISTS `intelafdb`.`sale` (
   `id_sale` INT NOT NULL AUTO_INCREMENT,
   `date` DATETIME NULL,
   `total` DOUBLE NULL,
-  `id_client` INT NOT NULL,
-  PRIMARY KEY (`id_sale`, `id_client`),
-  INDEX `fk_sale_client1_idx` (`id_client` ASC) VISIBLE,
-  CONSTRAINT `fk_sale_client1`
-    FOREIGN KEY (`id_client`)
-    REFERENCES `intelafdb`.`client` (`user_id_user`)
+  `id_customer` INT NOT NULL,
+  PRIMARY KEY (`id_sale`, `id_customer`),
+  INDEX `fk_sale_customer1_idx` (`id_customer` ASC) VISIBLE,
+  CONSTRAINT `fk_sale_customer1`
+    FOREIGN KEY (`id_customer`)
+    REFERENCES `intelafdb`.`customer` (`user_id_user`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;

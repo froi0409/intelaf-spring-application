@@ -1,12 +1,12 @@
 package com.ayd2.intelafbackend.entities.users;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+
+import java.math.BigDecimal;
 
 @Entity
 @Getter
@@ -15,32 +15,14 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 public class Customer {
 
     @Id
-    @Column
-    private Integer idUser;
+    @Column(name = "user_id_user")
+    private Long userIdUser;
 
-    @Column
-    private String nit;
+    @Column(name = "credit")
+    private BigDecimal credit;
 
-    @Column
-    private String name;
-
-    @Column
-    private String phone;
-
-    @Column
-    private String dpi;
-
-    @Column
-    private String email;
-
-    @Column
-    private String address;
-
-    @Column
-    private String password;
-
-    @Column
-    private String username;
-
-
+    @OneToOne
+    @MapsId
+    @JoinColumn(name = "user_id_user")
+    private User user;
 }
