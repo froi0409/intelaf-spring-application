@@ -2,6 +2,8 @@ package com.ayd2.intelafbackend.dto.store;
 
 import lombok.Value;
 
+import java.util.Date;
+
 @Value
 public class CreateStoreRequestDTO {
     String idStore;
@@ -10,5 +12,6 @@ public class CreateStoreRequestDTO {
     String phone1;
     String email;
     String phone2;
-    String storeHours;
+    Date openingHour;
+    Date closingHour;
 }

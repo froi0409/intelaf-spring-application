@@ -30,7 +30,8 @@ public class StoreServiceImpl implements StoreService {
         newStoreEntity.setPhone1(newStore.getPhone1());
         newStoreEntity.setPhone2(newStore.getPhone2());
         newStoreEntity.setEmail(newStore.getEmail());
-        newStoreEntity.setStoreHours(newStore.getStoreHours());
+        newStoreEntity.setOpeningHour(newStore.getOpeningHour());
+        newStoreEntity.setClosingHour(newStore.getClosingHour());
 
         newStoreEntity = storeRepository.save(newStoreEntity);
 

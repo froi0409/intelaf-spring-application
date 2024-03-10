@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Entity(name = "store")
 @Getter
 @Setter
@@ -32,7 +34,10 @@ public class Store {
     @Column
     private String email;
 
-    @Column(name = "store_hours")
-    private String storeHours;
+    @Column(name = "opening_hour")
+    private Date openingHour;
+
+    @Column(name = "closing_hour")
+    private Date closingHour;
 
 }
