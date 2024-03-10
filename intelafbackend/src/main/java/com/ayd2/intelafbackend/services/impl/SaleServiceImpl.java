@@ -39,7 +39,7 @@ public class SaleServiceImpl implements SaleService {
     @Override
     public SaleResponseDTO registerSale(SaleRequestDTO saleRequestDTO) throws NotFoundException {
 
-        Customer customer = customerRepository.findById(Long.valueOf(saleRequestDTO.getCustomer()))
+        Customer customer = customerRepository.findByNit(saleRequestDTO.getNit())
                 .orElseThrow(() -> new NotFoundException("customer not found"));
 
         Sale newSale = new Sale();

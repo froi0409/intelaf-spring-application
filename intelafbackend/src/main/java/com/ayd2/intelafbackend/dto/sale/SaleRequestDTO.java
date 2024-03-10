@@ -12,5 +12,5 @@ import java.util.Date;
 public class SaleRequestDTO {
     Date date;
     Double total;
-    Integer customer;
+    String nit;
 }
