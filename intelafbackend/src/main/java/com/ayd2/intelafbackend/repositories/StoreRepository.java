@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface StoreRepository extends CrudRepository<Store, String> {
 
+
+
     @Override
     List<Store> findAll();
 
