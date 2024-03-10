@@ -6,6 +6,8 @@ package com.ayd2.intelafbackend.services;
 
 import com.ayd2.intelafbackend.dto.products.ProductRequestDTO;
 import com.ayd2.intelafbackend.dto.products.ProductResponseDTO;
+import com.ayd2.intelafbackend.dto.products.ProductStoreRequestDTO;
+import com.ayd2.intelafbackend.dto.products.ProductStoreResponseDTO;
 import java.util.List;
 
 /**
@@ -14,9 +16,11 @@ import java.util.List;
  */
 public interface ProductService {
     
-    ProductResponseDTO createProduct(ProductRequestDTO newProduct);
+    ProductResponseDTO createProduct(ProductStoreRequestDTO newProduct);
     
     List<ProductResponseDTO> findAll();
     
-    ProductResponseDTO updateProduct(String id, ProductRequestDTO updatedProduct);
+    List<ProductStoreResponseDTO> findAllProductsWithStock();
+    
+    ProductResponseDTO updateProduct(String id, ProductStoreRequestDTO updatedProduct);
 }

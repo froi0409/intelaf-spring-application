@@ -6,6 +6,8 @@ package com.ayd2.intelafbackend.controllers;
 
 import com.ayd2.intelafbackend.dto.products.ProductRequestDTO;
 import com.ayd2.intelafbackend.dto.products.ProductResponseDTO;
+import com.ayd2.intelafbackend.dto.products.ProductStoreRequestDTO;
+import com.ayd2.intelafbackend.dto.products.ProductStoreResponseDTO;
 import com.ayd2.intelafbackend.services.ProductService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +36,7 @@ public class ProductController {
     } 
     
     @PostMapping("/create-product")
-    public ResponseEntity<ProductResponseDTO> createProduct(@RequestBody ProductRequestDTO newProduct) {
+    public ResponseEntity<ProductResponseDTO> createProduct(@RequestBody ProductStoreRequestDTO newProduct) {
         ProductResponseDTO responseDTO = productService.createProduct(newProduct);
         
         return ResponseEntity
@@ -46,9 +48,14 @@ public class ProductController {
     public ResponseEntity<List<ProductResponseDTO>> findAllProducts() {
         return ResponseEntity.ok(productService.findAll());
     }
+    
+    @GetMapping("/get-all-products-stock")
+    public ResponseEntity<List<ProductStoreResponseDTO>> findAllProductsWithStock() {
+        return ResponseEntity.ok(productService.findAllProductsWithStock());
+    }
      
     @PutMapping("/update-product/{id}")
-    public ResponseEntity<ProductResponseDTO> updateProduct(@PathVariable("id") String id, @RequestBody ProductRequestDTO updatedProduct) {
+    public ResponseEntity<ProductResponseDTO> updateProduct(@PathVariable("id") String id, @RequestBody ProductStoreRequestDTO updatedProduct) {
         ProductResponseDTO responseDTO = productService.updateProduct(id, updatedProduct);
         if (responseDTO != null) {
             return ResponseEntity.ok(responseDTO);
