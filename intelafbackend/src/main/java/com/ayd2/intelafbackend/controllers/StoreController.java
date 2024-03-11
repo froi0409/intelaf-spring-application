@@ -3,6 +3,7 @@ package com.ayd2.intelafbackend.controllers;
 
 import com.ayd2.intelafbackend.dto.store.CreateStoreRequestDTO;
 import com.ayd2.intelafbackend.dto.store.StoreResponseDTO;
+import com.ayd2.intelafbackend.exceptions.DuplicatedEntityException;
 import com.ayd2.intelafbackend.services.StoreService;
 import com.ayd2.intelafbackend.services.impl.StoreServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/v1/store")
+@CrossOrigin(origins = "http://localhost:3000")
 public class StoreController {
 
     private StoreService storeService;
@@ -25,7 +27,7 @@ public class StoreController {
     }
 
     @PostMapping
-    public ResponseEntity<StoreResponseDTO> createStore(@RequestBody CreateStoreRequestDTO newStore) {
+    public ResponseEntity<StoreResponseDTO> createStore(@RequestBody CreateStoreRequestDTO newStore) throws DuplicatedEntityException {
         StoreResponseDTO responseDTO = storeService.createStore(newStore);
 
         return ResponseEntity

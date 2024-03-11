@@ -33,7 +33,8 @@ CREATE TABLE IF NOT EXISTS `intelafdb`.`store` (
   `phone1` VARCHAR(8) NOT NULL,
   `phone2` VARCHAR(8) NULL,
   `email` VARCHAR(80) NULL,
-  `store_hours` VARCHAR(80) NULL,
+  `opening_hour` TIME NULL,
+  `closing_hour` TIME NULL,
   PRIMARY KEY (`id_store`))
 ENGINE = InnoDB;
 
