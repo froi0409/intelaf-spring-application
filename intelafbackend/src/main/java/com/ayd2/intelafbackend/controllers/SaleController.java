@@ -14,7 +14,6 @@ import java.util.List;
 
 @Controller
 @RequestMapping(path = "/v1/sale")
-@CrossOrigin(origins = "http://localhost:3000") // Replace with your frontend origin
 public class SaleController {
 
     private final SaleService saleService;
