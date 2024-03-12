@@ -4,6 +4,7 @@ import com.ayd2.intelafbackend.dto.customer.CustomerRequestDTO;
 import com.ayd2.intelafbackend.dto.customer.CustomerRequestNitDTO;
 import com.ayd2.intelafbackend.dto.customer.CustomerResponseNameAddrbyNItDTO;
 import com.ayd2.intelafbackend.dto.customer.CustomerResponseDTO;
+import com.ayd2.intelafbackend.exceptions.NotAcceptableException;
 import com.ayd2.intelafbackend.exceptions.NotFoundException;
 
 import java.util.List;
@@ -14,5 +15,5 @@ public interface CustomerService {
 
     CustomerResponseNameAddrbyNItDTO findByNIt(CustomerRequestNitDTO customerRequestNitDTO) throws NotFoundException;
 
-    CustomerResponseDTO createCustomer(CustomerRequestDTO customerRequestDTO);
+    CustomerResponseDTO createCustomer(CustomerRequestDTO customerRequestDTO) throws NotAcceptableException;
 }

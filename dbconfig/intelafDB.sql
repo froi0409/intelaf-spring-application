@@ -121,7 +121,7 @@ DROP TABLE IF EXISTS `intelafdb`.`customer` ;
 
 CREATE TABLE IF NOT EXISTS `intelafdb`.`customer` (
   `user_id_user` INT NOT NULL,
-  `credit` DECIMAL NULL,
+  `credit` DECIMAL (10,2) NULL,
   PRIMARY KEY (`user_id_user`),
   CONSTRAINT `fk_customer_user1`
     FOREIGN KEY (`user_id_user`)

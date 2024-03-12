@@ -4,6 +4,7 @@ import com.ayd2.intelafbackend.dto.customer.CustomerRequestDTO;
 import com.ayd2.intelafbackend.dto.customer.CustomerRequestNitDTO;
 import com.ayd2.intelafbackend.dto.customer.CustomerResponseDTO;
 import com.ayd2.intelafbackend.dto.customer.CustomerResponseNameAddrbyNItDTO;
+import com.ayd2.intelafbackend.exceptions.NotAcceptableException;
 import com.ayd2.intelafbackend.exceptions.NotFoundException;
 import com.ayd2.intelafbackend.services.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +40,8 @@ public class CustomerController {
     }
 
     @PostMapping("create")
-    public ResponseEntity<CustomerResponseDTO> createCustomer(@RequestBody CustomerRequestDTO customerRequestDTO) {
+    public ResponseEntity<CustomerResponseDTO> createCustomer(@RequestBody CustomerRequestDTO customerRequestDTO) throws NotAcceptableException {
+        System.out.println(customerRequestDTO.toString());
         CustomerResponseDTO customerResponseDTO = customerService.createCustomer(customerRequestDTO);
         return  ResponseEntity.status(HttpStatus.CREATED).body(customerResponseDTO);
     }
