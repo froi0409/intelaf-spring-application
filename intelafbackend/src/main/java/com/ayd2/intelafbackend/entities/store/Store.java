@@ -35,9 +35,9 @@ public class Store {
     private String email;
 
     @Column(name = "opening_hour")
-    private Date openingHour;
+    private String openingHour;
 
     @Column(name = "closing_hour")
-    private Date closingHour;
+    private String closingHour;
 
 }

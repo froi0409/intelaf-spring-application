@@ -12,6 +12,6 @@ public class CreateStoreRequestDTO {
     String phone1;
     String email;
     String phone2;
-    Date openingHour;
-    Date closingHour;
+    String openingHour;
+    String closingHour;
 }

@@ -14,8 +14,8 @@ public class StoreResponseDTO {
     String phone1;
     String phone2;
     String email;
-    Date openingHour;
-    Date closingHour;
+    String openingHour;
+    String closingHour;
 
     public StoreResponseDTO(Store storeEntity) {
         this.idStore = storeEntity.getIdStore();
