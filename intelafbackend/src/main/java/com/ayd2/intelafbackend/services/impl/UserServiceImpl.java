@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
         newUserEntity.setAddress(newEmployee.getAddress());
         newUserEntity.setDpi(newEmployee.getDpi());
         newUserEntity.setEmail(newEmployee.getEmail());
-        newUserEntity.setName(newEmployee.getEmail());
+        newUserEntity.setName(newEmployee.getName());
         newUserEntity.setNit(newEmployee.getNit());
         newUserEntity.setPassword(newEmployee.getPassword());
         newUserEntity.setPhone(newEmployee.getPhone());

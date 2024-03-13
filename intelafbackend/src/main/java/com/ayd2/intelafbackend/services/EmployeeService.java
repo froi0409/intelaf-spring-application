@@ -4,10 +4,13 @@
  */
 package com.ayd2.intelafbackend.services;
 
+import com.ayd2.intelafbackend.dto.employee.EmployeeResponseDTO;
+import java.util.List;
+
 /**
  *
  * @author waliray
  */
 public interface EmployeeService {
-    
+    List<EmployeeResponseDTO> findAll();
 }
