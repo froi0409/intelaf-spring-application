@@ -13,4 +13,6 @@ public interface UserService {
     List<UserResponseDTO> findAll();
 
     User createUser(UserRequestDTO userRequestDTO) throws NotAcceptableException;
+
+    User editUser(UserRequestDTO userRequestDTO) throws NotAcceptableException;
 }

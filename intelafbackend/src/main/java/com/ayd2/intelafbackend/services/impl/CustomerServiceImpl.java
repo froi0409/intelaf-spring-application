@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -58,5 +59,17 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setUser(userResponseDTO);
         customer = customerRepository.save(customer);
         return new CustomerResponseDTO(customer);
+    }
+
+    @Override
+    @Transactional
+    public CustomerResponseDTO editCustomer(CustomerRequestDTO customerRequestDTO) throws NotFoundException, NotAcceptableException {
+        UserRequestDTO userRequestDTO =  new UserRequestDTO(customerRequestDTO);
+        User userResponse = userService.editUser(userRequestDTO);
+        Customer existingCustomer = customerRepository.findById(userResponse.getIdUser())
+                .orElseThrow(() -> new NotFoundException("customer not found"));
+        existingCustomer.setCredit(customerRequestDTO.getCredit());
+        existingCustomer = customerRepository.save(existingCustomer);
+        return new CustomerResponseDTO(existingCustomer);
     }
 }

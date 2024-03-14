@@ -14,5 +14,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u WHERE u.nit = :nit OR u.dpi = :dpi OR u.username = :username")
     Optional<User> findByNitDPIUsername(@Param("nit") String nit, @Param("dpi") String dpi, @Param("username") String username);
 
+    @Query("SELECT u FROM User u WHERE u.nit = :nit")
+    Optional<User> findByNit(@Param("nit") String nit);
 
+    @Query("SELECT u FROM User u WHERE (u.dpi = :dpi OR u.username = :username) AND u.nit <> :nit")
+    Optional<User> findDPIUsernameDiferentByNit(@Param("nit") String nit, @Param("dpi") String dpi, @Param("username") String username);
 }

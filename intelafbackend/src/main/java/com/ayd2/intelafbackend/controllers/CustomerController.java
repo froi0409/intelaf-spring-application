@@ -41,8 +41,13 @@ public class CustomerController {
 
     @PostMapping("create")
     public ResponseEntity<CustomerResponseDTO> createCustomer(@RequestBody CustomerRequestDTO customerRequestDTO) throws NotAcceptableException {
-        System.out.println(customerRequestDTO.toString());
         CustomerResponseDTO customerResponseDTO = customerService.createCustomer(customerRequestDTO);
         return  ResponseEntity.status(HttpStatus.CREATED).body(customerResponseDTO);
+    }
+
+    @PutMapping("update")
+    public ResponseEntity<CustomerResponseDTO> editCustomer(@RequestBody CustomerRequestDTO customerRequestDTO) throws NotAcceptableException {
+        CustomerResponseDTO customerResponseDTO = customerService.editCustomer(customerRequestDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(customerResponseDTO);
     }
 }
