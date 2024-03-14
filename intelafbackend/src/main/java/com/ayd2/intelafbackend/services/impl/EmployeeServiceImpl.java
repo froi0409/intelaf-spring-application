@@ -42,4 +42,10 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeResponseDTOs;
 
     }
+    
+    public EmployeeResponseDTO findByUsername(String username){
+        Employee employee = employeeRepository.findByUserUsername(username);
+        EmployeeResponseDTO employeeResponseDTO = new EmployeeResponseDTO(employee.getUser(),employee);
+        return employeeResponseDTO;
+    }
 }

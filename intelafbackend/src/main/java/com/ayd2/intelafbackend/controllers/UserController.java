@@ -36,6 +36,11 @@ public class UserController {
         return  ResponseEntity.status(HttpStatus.OK).body(userService.findAll());
     }
     
+    @GetMapping("/employee-by-username/{username}")
+    public ResponseEntity<EmployeeResponseDTO> findEmployeeById(@PathVariable("username") String username){
+        return  ResponseEntity.status(HttpStatus.OK).body(employeeService.findByUsername(username));
+    }
+    
     @GetMapping("/list-all-employees")
     public ResponseEntity<List<EmployeeResponseDTO>> listAllEmployees() {        
         return ResponseEntity.status(HttpStatus.CREATED).body(employeeService.findAll());

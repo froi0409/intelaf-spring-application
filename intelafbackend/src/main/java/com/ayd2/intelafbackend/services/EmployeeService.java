@@ -13,4 +13,5 @@ import java.util.List;
  */
 public interface EmployeeService {
     List<EmployeeResponseDTO> findAll();
+    EmployeeResponseDTO findByUsername(String username);
 }
