@@ -4,6 +4,7 @@ import com.ayd2.intelafbackend.dto.customer.CustomerRequestDTO;
 import com.ayd2.intelafbackend.dto.customer.CustomerRequestNitDTO;
 import com.ayd2.intelafbackend.dto.customer.CustomerResponseNameAddrbyNItDTO;
 import com.ayd2.intelafbackend.dto.customer.CustomerResponseDTO;
+import com.ayd2.intelafbackend.dto.customer.update.CustomerUpdateResponseDTO;
 import com.ayd2.intelafbackend.dto.user.UserRequestDTO;
 import com.ayd2.intelafbackend.dto.user.UserResponseDTO;
 import com.ayd2.intelafbackend.entities.users.Customer;
@@ -71,5 +72,12 @@ public class CustomerServiceImpl implements CustomerService {
         existingCustomer.setCredit(customerRequestDTO.getCredit());
         existingCustomer = customerRepository.save(existingCustomer);
         return new CustomerResponseDTO(existingCustomer);
+    }
+
+    @Override
+    public CustomerUpdateResponseDTO findUpdate(Long userIdUser) throws NotFoundException {
+        Customer existingCustomer = customerRepository.findById(userIdUser)
+                .orElseThrow(() -> new NotFoundException("customer not found"));
+        return new CustomerUpdateResponseDTO(existingCustomer);
     }
 }

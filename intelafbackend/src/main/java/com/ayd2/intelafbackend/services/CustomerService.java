@@ -4,6 +4,7 @@ import com.ayd2.intelafbackend.dto.customer.CustomerRequestDTO;
 import com.ayd2.intelafbackend.dto.customer.CustomerRequestNitDTO;
 import com.ayd2.intelafbackend.dto.customer.CustomerResponseNameAddrbyNItDTO;
 import com.ayd2.intelafbackend.dto.customer.CustomerResponseDTO;
+import com.ayd2.intelafbackend.dto.customer.update.CustomerUpdateResponseDTO;
 import com.ayd2.intelafbackend.exceptions.NotAcceptableException;
 import com.ayd2.intelafbackend.exceptions.NotFoundException;
 
@@ -18,4 +19,6 @@ public interface CustomerService {
     CustomerResponseDTO createCustomer(CustomerRequestDTO customerRequestDTO) throws NotAcceptableException;
 
     CustomerResponseDTO editCustomer(CustomerRequestDTO customerRequestDTO) throws NotFoundException, NotAcceptableException;
+
+    CustomerUpdateResponseDTO findUpdate(Long userIdUser) throws NotFoundException;
 }

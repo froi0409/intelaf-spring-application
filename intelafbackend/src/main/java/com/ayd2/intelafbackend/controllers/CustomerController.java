@@ -4,6 +4,7 @@ import com.ayd2.intelafbackend.dto.customer.CustomerRequestDTO;
 import com.ayd2.intelafbackend.dto.customer.CustomerRequestNitDTO;
 import com.ayd2.intelafbackend.dto.customer.CustomerResponseDTO;
 import com.ayd2.intelafbackend.dto.customer.CustomerResponseNameAddrbyNItDTO;
+import com.ayd2.intelafbackend.dto.customer.update.CustomerUpdateResponseDTO;
 import com.ayd2.intelafbackend.exceptions.NotAcceptableException;
 import com.ayd2.intelafbackend.exceptions.NotFoundException;
 import com.ayd2.intelafbackend.services.CustomerService;
@@ -49,5 +50,11 @@ public class CustomerController {
     public ResponseEntity<CustomerResponseDTO> editCustomer(@RequestBody CustomerRequestDTO customerRequestDTO) throws NotAcceptableException {
         CustomerResponseDTO customerResponseDTO = customerService.editCustomer(customerRequestDTO);
         return ResponseEntity.status(HttpStatus.OK).body(customerResponseDTO);
+    }
+
+    @GetMapping("findUpdate/{userIdUser}")
+    public ResponseEntity<CustomerUpdateResponseDTO> findUpdate(@PathVariable Long userIdUser) throws NotFoundException {
+        CustomerUpdateResponseDTO customerUpdateResponseDTO = customerService.findUpdate(userIdUser);
+        return ResponseEntity.status(HttpStatus.OK).body(customerUpdateResponseDTO);
     }
 }
