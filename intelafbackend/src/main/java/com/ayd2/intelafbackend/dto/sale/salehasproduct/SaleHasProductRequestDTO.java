@@ -4,8 +4,6 @@ import lombok.Value;
 
 @Value
 public class SaleHasProductRequestDTO {
-    Integer saleId;
     String productId;
     Integer quantity;
-
 }
