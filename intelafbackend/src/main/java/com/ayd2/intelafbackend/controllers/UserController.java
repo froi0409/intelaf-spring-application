@@ -32,23 +32,5 @@ public class UserController {
     public ResponseEntity<List<UserResponseDTO>> findAll(){
         return  ResponseEntity.status(HttpStatus.OK).body(userService.findAll());
     }
-    
-    @PostMapping("/create-employee")
-    public ResponseEntity<EmployeeResponseDTO> createEmployee(@RequestBody EmployeeRequestDTO newEmployee) {
-        EmployeeResponseDTO responseDTO = userService.createEmployee(newEmployee);
-        
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(responseDTO);
-    }
-    
-    @PutMapping("/update-employee/{id}")
-    public ResponseEntity<EmployeeResponseDTO> updateEmployee(@PathVariable("id") String id, @RequestBody EmployeeRequestDTO updatedEmployee) {
-        EmployeeResponseDTO responseDTO = userService.updateEmployee(id, updatedEmployee);
-        if (responseDTO != null) {
-            return ResponseEntity.ok(responseDTO);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
+
 }

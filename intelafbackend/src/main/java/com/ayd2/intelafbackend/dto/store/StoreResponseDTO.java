@@ -12,7 +12,8 @@ public class StoreResponseDTO {
     String phone1;
     String phone2;
     String email;
-    String storeHours;
+    String openingHour;
+    String closingHour;
 
     public StoreResponseDTO(Store storeEntity) {
         this.idStore = storeEntity.getIdStore();
@@ -21,7 +22,8 @@ public class StoreResponseDTO {
         this.phone1 = storeEntity.getPhone1();
         this.phone2 = storeEntity.getPhone2();
         this.email = storeEntity.getEmail();
-        this.storeHours = storeEntity.getStoreHours();
+        this.openingHour = storeEntity.getOpeningHour();
+        this.closingHour = storeEntity.getClosingHour();
     }
 
 }
