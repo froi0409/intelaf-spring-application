@@ -23,4 +23,6 @@ public interface ProductService {
     List<ProductStoreResponseDTO> findAllProductsWithStock();
     
     ProductResponseDTO updateProduct(String id, ProductStoreRequestDTO updatedProduct);
+    
+    ProductStoreResponseDTO findProductById(String id);
 }

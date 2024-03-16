@@ -43,6 +43,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     }
     
+    @Override
     public EmployeeResponseDTO findByUsername(String username){
         Employee employee = employeeRepository.findByUserUsername(username);
         EmployeeResponseDTO employeeResponseDTO = new EmployeeResponseDTO(employee.getUser(),employee);

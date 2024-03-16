@@ -127,4 +127,22 @@ public class ProductServiceImpl implements ProductService{
             return null;
         }
     }
+    
+    @Override
+    public ProductStoreResponseDTO findProductById(String id){
+        Optional<Product> productOptional = productRepository.findById(id);
+        if (productOptional.isPresent()) {
+            Product product = productOptional.get();
+            List<StoreProductStoreResponseDTO> stores = this.productStoreRepository.findByIdProductIdProduct(product.getIdProduct())
+                    .stream()
+                    .map(StoreProductStoreResponseDTO::new)
+                    .collect(Collectors.toList());
+            
+            ProductStoreResponseDTO productStoreResponse = new ProductStoreResponseDTO(product,stores);
+            
+            return productStoreResponse;
+        }else{
+            return null;
+        }
+    }
 }
