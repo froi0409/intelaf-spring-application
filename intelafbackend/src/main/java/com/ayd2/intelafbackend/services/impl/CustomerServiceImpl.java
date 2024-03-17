@@ -10,11 +10,11 @@ import com.ayd2.intelafbackend.dto.user.UserResponseDTO;
 import com.ayd2.intelafbackend.entities.users.Customer;
 import com.ayd2.intelafbackend.entities.users.User;
 import com.ayd2.intelafbackend.exceptions.NotAcceptableException;
-import com.ayd2.intelafbackend.exceptions.NotFoundException;
 import com.ayd2.intelafbackend.repositories.CustomerRepository;
 import com.ayd2.intelafbackend.repositories.UserRepository;
 import com.ayd2.intelafbackend.services.CustomerService;
 import com.ayd2.intelafbackend.services.UserService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,7 +47,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerResponseNameAddrbyNItDTO findByNIt(CustomerRequestNitDTO customerRequestNitDTO) {
         Customer customer = customerRepository.findByNit(customerRequestNitDTO.getNit())
-                .orElseThrow(() -> new NotFoundException("customer not found"));
+                .orElseThrow(() -> new EntityNotFoundException("customer not found"));
         return new CustomerResponseNameAddrbyNItDTO(customer);
     }
     @Transactional
@@ -64,20 +64,20 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     @Transactional
-    public CustomerResponseDTO editCustomer(CustomerRequestDTO customerRequestDTO) throws NotFoundException, NotAcceptableException {
+    public CustomerResponseDTO editCustomer(CustomerRequestDTO customerRequestDTO) throws EntityNotFoundException, NotAcceptableException {
         UserRequestDTO userRequestDTO =  new UserRequestDTO(customerRequestDTO);
         User userResponse = userService.editUser(userRequestDTO);
         Customer existingCustomer = customerRepository.findById(userResponse.getIdUser())
-                .orElseThrow(() -> new NotFoundException("customer not found"));
+                .orElseThrow(() -> new EntityNotFoundException("customer not found"));
         existingCustomer.setCredit(customerRequestDTO.getCredit());
         existingCustomer = customerRepository.save(existingCustomer);
         return new CustomerResponseDTO(existingCustomer);
     }
 
     @Override
-    public CustomerUpdateResponseDTO findUpdate(Long userIdUser) throws NotFoundException {
+    public CustomerUpdateResponseDTO findUpdate(Long userIdUser) throws EntityNotFoundException {
         Customer existingCustomer = customerRepository.findById(userIdUser)
-                .orElseThrow(() -> new NotFoundException("customer not found"));
+                .orElseThrow(() -> new EntityNotFoundException("customer not found"));
         return new CustomerUpdateResponseDTO(existingCustomer);
     }
 }

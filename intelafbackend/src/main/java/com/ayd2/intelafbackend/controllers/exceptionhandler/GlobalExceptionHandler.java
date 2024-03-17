@@ -1,7 +1,6 @@
 package com.ayd2.intelafbackend.controllers.exceptionhandler;
 
 import com.ayd2.intelafbackend.exceptions.NotAcceptableException;
-import com.ayd2.intelafbackend.exceptions.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import com.ayd2.intelafbackend.exceptions.DuplicatedEntityException;
@@ -26,10 +25,7 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.NOT_FOUND)
                 .body(ex.getMessage());
     }
-    @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<String> HandlerNotFoundExpetion(NotFoundException notFoundException){
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(notFoundException.getMessage());
-    }
+
     @ExceptionHandler(NotAcceptableException.class)
     public ResponseEntity<String> HandlerNotAcceptableException(NotAcceptableException notAcceptableException){
         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(notAcceptableException.getMessage());

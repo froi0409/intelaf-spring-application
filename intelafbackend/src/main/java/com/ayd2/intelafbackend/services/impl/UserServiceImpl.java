@@ -6,9 +6,9 @@ import com.ayd2.intelafbackend.dto.user.UserResponseDTO;
 import com.ayd2.intelafbackend.entities.users.Customer;
 import com.ayd2.intelafbackend.entities.users.User;
 import com.ayd2.intelafbackend.exceptions.NotAcceptableException;
-import com.ayd2.intelafbackend.exceptions.NotFoundException;
 import com.ayd2.intelafbackend.repositories.UserRepository;
 import com.ayd2.intelafbackend.services.UserService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -64,7 +64,7 @@ public class UserServiceImpl implements UserService {
 
         // verify si el user exist
         if (optionalUser.isEmpty()) {
-            throw new NotFoundException("User not found");
+            throw new EntityNotFoundException("User not found");
         }
 
         //Get the user

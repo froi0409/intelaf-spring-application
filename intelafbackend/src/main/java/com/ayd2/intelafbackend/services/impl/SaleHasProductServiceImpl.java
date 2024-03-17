@@ -7,10 +7,10 @@ import com.ayd2.intelafbackend.entities.sales.SaleHasProduct;
 import com.ayd2.intelafbackend.entities.sales.SaleHasProductPK;
 import com.ayd2.intelafbackend.entities.users.Customer;
 import com.ayd2.intelafbackend.exceptions.NotAcceptableException;
-import com.ayd2.intelafbackend.exceptions.NotFoundException;
 import com.ayd2.intelafbackend.repositories.ProductRepository;
 import com.ayd2.intelafbackend.repositories.SaleHasProductRepository;
 import com.ayd2.intelafbackend.services.SaleHasProductService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,9 +28,9 @@ public class SaleHasProductServiceImpl implements SaleHasProductService {
 
 
     @Override
-    public void registerProduct(Sale sale, SaleHasProductRequestDTO saleHasProductRequestDTO) throws NotAcceptableException, NotFoundException {
+    public void registerProduct(Sale sale, SaleHasProductRequestDTO saleHasProductRequestDTO) throws NotAcceptableException, EntityNotFoundException {
         Product product = productRepository.findById(saleHasProductRequestDTO.getProductId())
-                .orElseThrow(() -> new NotFoundException("product not found"));
+                .orElseThrow(() -> new EntityNotFoundException("product not found"));
 
         // Crear la clave primaria compuesta
         SaleHasProductPK pk = new SaleHasProductPK();

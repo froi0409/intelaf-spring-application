@@ -6,7 +6,7 @@ import com.ayd2.intelafbackend.dto.customer.CustomerResponseNameAddrbyNItDTO;
 import com.ayd2.intelafbackend.dto.customer.CustomerResponseDTO;
 import com.ayd2.intelafbackend.dto.customer.update.CustomerUpdateResponseDTO;
 import com.ayd2.intelafbackend.exceptions.NotAcceptableException;
-import com.ayd2.intelafbackend.exceptions.NotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 
 import java.util.List;
 
@@ -14,11 +14,11 @@ public interface CustomerService {
 
     List<CustomerResponseDTO> findAll();
 
-    CustomerResponseNameAddrbyNItDTO findByNIt(CustomerRequestNitDTO customerRequestNitDTO) throws NotFoundException;
+    CustomerResponseNameAddrbyNItDTO findByNIt(CustomerRequestNitDTO customerRequestNitDTO) throws EntityNotFoundException;
 
     CustomerResponseDTO createCustomer(CustomerRequestDTO customerRequestDTO) throws NotAcceptableException;
 
-    CustomerResponseDTO editCustomer(CustomerRequestDTO customerRequestDTO) throws NotFoundException, NotAcceptableException;
+    CustomerResponseDTO editCustomer(CustomerRequestDTO customerRequestDTO) throws EntityNotFoundException, NotAcceptableException;
 
-    CustomerUpdateResponseDTO findUpdate(Long userIdUser) throws NotFoundException;
+    CustomerUpdateResponseDTO findUpdate(Long userIdUser) throws EntityNotFoundException;
 }

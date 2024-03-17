@@ -6,8 +6,8 @@ import com.ayd2.intelafbackend.dto.customer.CustomerResponseDTO;
 import com.ayd2.intelafbackend.dto.customer.CustomerResponseNameAddrbyNItDTO;
 import com.ayd2.intelafbackend.dto.customer.update.CustomerUpdateResponseDTO;
 import com.ayd2.intelafbackend.exceptions.NotAcceptableException;
-import com.ayd2.intelafbackend.exceptions.NotFoundException;
 import com.ayd2.intelafbackend.services.CustomerService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
@@ -35,7 +35,7 @@ public class CustomerController {
     }
 
     @GetMapping("findById/{nit}")
-    public ResponseEntity<CustomerResponseNameAddrbyNItDTO> findByNIt(@PathVariable String nit) throws NotFoundException {
+    public ResponseEntity<CustomerResponseNameAddrbyNItDTO> findByNIt(@PathVariable String nit) throws EntityNotFoundException {
         CustomerResponseNameAddrbyNItDTO customerResponseNameAddrbyNItDTO = customerService.findByNIt(new CustomerRequestNitDTO(nit));
         return ResponseEntity.status(HttpStatus.OK).body(customerResponseNameAddrbyNItDTO);
     }
@@ -53,7 +53,7 @@ public class CustomerController {
     }
 
     @GetMapping("findUpdate/{userIdUser}")
-    public ResponseEntity<CustomerUpdateResponseDTO> findUpdate(@PathVariable Long userIdUser) throws NotFoundException {
+    public ResponseEntity<CustomerUpdateResponseDTO> findUpdate(@PathVariable Long userIdUser) throws EntityNotFoundException {
         CustomerUpdateResponseDTO customerUpdateResponseDTO = customerService.findUpdate(userIdUser);
         return ResponseEntity.status(HttpStatus.OK).body(customerUpdateResponseDTO);
     }

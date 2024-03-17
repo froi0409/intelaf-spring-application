@@ -7,12 +7,12 @@ import com.ayd2.intelafbackend.dto.sale.salehasproduct.SaleHasProductRequestDTO;
 import com.ayd2.intelafbackend.entities.sales.Sale;
 import com.ayd2.intelafbackend.entities.users.Customer;
 import com.ayd2.intelafbackend.exceptions.NotAcceptableException;
-import com.ayd2.intelafbackend.exceptions.NotFoundException;
 import com.ayd2.intelafbackend.repositories.CustomerRepository;
 import com.ayd2.intelafbackend.repositories.SaleRepository;
 import com.ayd2.intelafbackend.services.PaymentSaleService;
 import com.ayd2.intelafbackend.services.SaleHasProductService;
 import com.ayd2.intelafbackend.services.SaleService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,10 +47,10 @@ public class SaleServiceImpl implements SaleService {
     }
     @Transactional
     @Override
-    public SaleResponseDTO registerSale(SaleRequestDTO saleRequestDTO) throws NotFoundException, NotAcceptableException {
+    public SaleResponseDTO registerSale(SaleRequestDTO saleRequestDTO) throws EntityNotFoundException, NotAcceptableException {
 
         Customer customer = customerRepository.findByNit(saleRequestDTO.getNit())
-                .orElseThrow(() -> new NotFoundException("customer not found"));
+                .orElseThrow(() -> new EntityNotFoundException("customer not found"));
 
         Sale newSale = new Sale();
         newSale.setCustomer(customer);

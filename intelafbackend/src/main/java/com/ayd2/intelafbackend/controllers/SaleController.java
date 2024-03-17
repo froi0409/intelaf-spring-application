@@ -3,8 +3,8 @@ package com.ayd2.intelafbackend.controllers;
 import com.ayd2.intelafbackend.dto.sale.SaleRequestDTO;
 import com.ayd2.intelafbackend.dto.sale.SaleResponseDTO;
 import com.ayd2.intelafbackend.exceptions.NotAcceptableException;
-import com.ayd2.intelafbackend.exceptions.NotFoundException;
 import com.ayd2.intelafbackend.services.SaleService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +31,7 @@ public class SaleController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<SaleResponseDTO> registerSale(@RequestBody SaleRequestDTO saleRequestDTO) throws NotFoundException, NotAcceptableException {
+    public ResponseEntity<SaleResponseDTO> registerSale(@RequestBody SaleRequestDTO saleRequestDTO) throws EntityNotFoundException, NotAcceptableException {
         SaleResponseDTO saleResponseDTO = saleService.registerSale(saleRequestDTO);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
