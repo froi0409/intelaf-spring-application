@@ -3,6 +3,8 @@ package com.ayd2.intelafbackend.dto.store;
 import com.ayd2.intelafbackend.entities.store.Store;
 import lombok.Value;
 
+import java.util.Date;
+
 @Value
 public class StoreResponseDTO {
 
