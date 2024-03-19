@@ -8,11 +8,12 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.Value;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Value
 public class SaleRequestDTO {
-    Date date;
+    LocalDateTime date;
     Double total;
     String nit;
     SaleHasProductRequestDTO[] products;

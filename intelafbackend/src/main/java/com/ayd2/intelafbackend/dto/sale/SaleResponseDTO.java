@@ -5,13 +5,14 @@ import com.ayd2.intelafbackend.entities.users.Customer;
 import lombok.Value;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Value
 public class SaleResponseDTO {
 
     Long idSale;
-    Date date;
+    LocalDateTime date;
     Double total;
     BigDecimal credit;
     String nit;
