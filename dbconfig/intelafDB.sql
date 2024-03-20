@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS `intelafdb`.`product` (
   `id_product` VARCHAR(10) NOT NULL,
   `name` VARCHAR(100) NOT NULL,
   `manufacturer` VARCHAR(100) NOT NULL,
-  `price` DECIMAL NOT NULL,
+  `price` DECIMAL(10,2) NOT NULL,
   `description` VARCHAR(500) NULL,
   `guaranty_months` INT NULL,
   PRIMARY KEY (`id_product`))
@@ -122,7 +122,7 @@ DROP TABLE IF EXISTS `intelafdb`.`customer` ;
 
 CREATE TABLE IF NOT EXISTS `intelafdb`.`customer` (
   `user_id_user` INT NOT NULL,
-  `credit` DECIMAL NULL,
+  `credit` DECIMAL (10,2) NULL,
   PRIMARY KEY (`user_id_user`),
   CONSTRAINT `fk_customer_user1`
     FOREIGN KEY (`user_id_user`)
@@ -186,7 +186,7 @@ CREATE TABLE IF NOT EXISTS `intelafdb`.`payment_sale` (
   `id_payment_sale` INT NOT NULL AUTO_INCREMENT,
   `sale_id_sale` INT NOT NULL,
   `type` VARCHAR(45) NOT NULL,
-  `amount` DECIMAL NOT NULL,
+  `amount` DECIMAL(10,2) NOT NULL,
   PRIMARY KEY (`id_payment_sale`),
   CONSTRAINT `fk_payment_sale1`
     FOREIGN KEY (`sale_id_sale`)
@@ -256,7 +256,7 @@ CREATE TABLE IF NOT EXISTS `intelafdb`.`order` (
   `id_store_receive` VARCHAR(10) NOT NULL,
   `date_departure` DATETIME NOT NULL,
   `date_entry` DATETIME NULL,
-  `total` DECIMAL NULL,
+  `total` DECIMAL(10,2) NULL,
   `status` VARCHAR(45) NULL,
   PRIMARY KEY (`id_order`),
   INDEX `fk_order_store1_idx` (`id_store_shipping` ASC) VISIBLE,
@@ -308,7 +308,7 @@ CREATE TABLE IF NOT EXISTS `intelafdb`.`payment_order` (
   `id_payment_order` INT NOT NULL AUTO_INCREMENT,
   `order_id_order` INT NOT NULL,
   `type` VARCHAR(45) NOT NULL,
-  `amount` DECIMAL NOT NULL,
+  `amount` DECIMAL(10,2) NOT NULL,
   PRIMARY KEY (`id_payment_order`),
   CONSTRAINT `fk_payment_order_order1`
     FOREIGN KEY (`order_id_order`)
