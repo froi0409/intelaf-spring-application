@@ -24,6 +24,4 @@ public class EmployeeRequestDTO {
     final private String password;
     final private String role;
     
-    
-    
 }
