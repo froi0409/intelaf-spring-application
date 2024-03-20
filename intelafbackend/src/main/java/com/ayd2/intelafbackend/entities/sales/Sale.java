@@ -33,7 +33,7 @@ public class Sale {
     private Double total;
 
     @ManyToOne
-    @JoinColumn(name = "id_customer", referencedColumnName = "user_id_user")
+    //@JoinColumn(name = "id_customer", referencedColumnName = "user_id_user")
     private Customer customer;
 
 }

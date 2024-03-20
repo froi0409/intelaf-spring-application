@@ -1,4 +1,4 @@
-package com.ayd2.intelafbackend.controllers;
+package com.ayd2.intelafbackend.controllers.store;
 
 
 import com.ayd2.intelafbackend.dto.store.CreateStoreRequestDTO;
