@@ -8,7 +8,9 @@ import com.ayd2.intelafbackend.dto.products.ProductRequestDTO;
 import com.ayd2.intelafbackend.dto.products.ProductResponseDTO;
 import com.ayd2.intelafbackend.dto.products.ProductStoreRequestDTO;
 import com.ayd2.intelafbackend.dto.products.ProductStoreResponseDTO;
+import com.ayd2.intelafbackend.exceptions.DuplicatedEntityException;
 import com.ayd2.intelafbackend.services.ProductService;
+import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,7 +38,7 @@ public class ProductController {
     } 
     
     @PostMapping("/create-product")
-    public ResponseEntity<ProductResponseDTO> createProduct(@RequestBody ProductStoreRequestDTO newProduct) {
+    public ResponseEntity<ProductResponseDTO> createProduct(@RequestBody ProductStoreRequestDTO newProduct) throws DuplicatedEntityException{
         ProductResponseDTO responseDTO = productService.createProduct(newProduct);
         
         return ResponseEntity
@@ -50,7 +52,7 @@ public class ProductController {
     }
     
     @GetMapping("/get-product-by-id/{id}")
-    public ResponseEntity<ProductStoreResponseDTO> findProductById(@PathVariable("id") String id) {
+    public ResponseEntity<ProductStoreResponseDTO> findProductById(@PathVariable("id") String id) throws EntityNotFoundException{
         return ResponseEntity.ok(productService.findProductById(id));
     }
     
@@ -60,7 +62,7 @@ public class ProductController {
     }
      
     @PutMapping("/update-product/{id}")
-    public ResponseEntity<ProductResponseDTO> updateProduct(@PathVariable("id") String id, @RequestBody ProductStoreRequestDTO updatedProduct) {
+    public ResponseEntity<ProductResponseDTO> updateProduct(@PathVariable("id") String id, @RequestBody ProductStoreRequestDTO updatedProduct) throws DuplicatedEntityException, EntityNotFoundException{
         ProductResponseDTO responseDTO = productService.updateProduct(id, updatedProduct);
         if (responseDTO != null) {
             return ResponseEntity.ok(responseDTO);

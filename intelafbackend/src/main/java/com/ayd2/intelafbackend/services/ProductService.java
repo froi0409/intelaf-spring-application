@@ -8,6 +8,8 @@ import com.ayd2.intelafbackend.dto.products.ProductRequestDTO;
 import com.ayd2.intelafbackend.dto.products.ProductResponseDTO;
 import com.ayd2.intelafbackend.dto.products.ProductStoreRequestDTO;
 import com.ayd2.intelafbackend.dto.products.ProductStoreResponseDTO;
+import com.ayd2.intelafbackend.exceptions.DuplicatedEntityException;
+import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 
 /**
@@ -16,13 +18,13 @@ import java.util.List;
  */
 public interface ProductService {
     
-    ProductResponseDTO createProduct(ProductStoreRequestDTO newProduct);
+    ProductResponseDTO createProduct(ProductStoreRequestDTO newProduct) throws DuplicatedEntityException;
     
     List<ProductResponseDTO> findAll();
     
     List<ProductStoreResponseDTO> findAllProductsWithStock();
     
-    ProductResponseDTO updateProduct(String id, ProductStoreRequestDTO updatedProduct);
+    ProductResponseDTO updateProduct(String id, ProductStoreRequestDTO updatedProduct) throws DuplicatedEntityException, EntityNotFoundException;
     
-    ProductStoreResponseDTO findProductById(String id);
+    ProductStoreResponseDTO findProductById(String id) throws EntityNotFoundException;
 }
