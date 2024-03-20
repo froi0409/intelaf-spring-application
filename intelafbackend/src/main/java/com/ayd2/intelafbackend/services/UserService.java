@@ -18,7 +18,4 @@ public interface UserService {
 
     User editUser(UserRequestDTO userRequestDTO) throws NotAcceptableException;
 
-    EmployeeResponseDTO createEmployee(EmployeeRequestDTO newEmployee);
-
-    EmployeeResponseDTO updateEmployee(String id, EmployeeRequestDTO updatedEmployee);
 }

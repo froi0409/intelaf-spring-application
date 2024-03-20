@@ -23,12 +23,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class UserController {
 
     private UserService userService;
-    private EmployeeService employeeService;
 
     @Autowired
-    public UserController(UserService userService, EmployeeService employeeService) {
-        this.userService = userService;
-        this.employeeService = employeeService;
+    public UserController(UserService userService) {
+        this.userService = userService;        
     }
 
     @GetMapping("all")
@@ -36,34 +34,7 @@ public class UserController {
         return  ResponseEntity.status(HttpStatus.OK).body(userService.findAll());
     }
     
-    @GetMapping("/employee-by-username/{username}")
-    public ResponseEntity<EmployeeResponseDTO> findEmployeeById(@PathVariable("username") String username){
-        return  ResponseEntity.status(HttpStatus.OK).body(employeeService.findByUsername(username));
-    }
     
-    @GetMapping("/list-all-employees")
-    public ResponseEntity<List<EmployeeResponseDTO>> listAllEmployees() {        
-        return ResponseEntity.status(HttpStatus.CREATED).body(employeeService.findAll());
-    }
-    
-    @PostMapping("/create-employee")
-    public ResponseEntity<EmployeeResponseDTO> createEmployee(@RequestBody EmployeeRequestDTO newEmployee) {
-        EmployeeResponseDTO responseDTO = userService.createEmployee(newEmployee);
-        
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(responseDTO);
-    }
-    
-    @PutMapping("/update-employee/{id}")
-    public ResponseEntity<EmployeeResponseDTO> updateEmployee(@PathVariable("id") String id, @RequestBody EmployeeRequestDTO updatedEmployee) {
-        EmployeeResponseDTO responseDTO = userService.updateEmployee(id, updatedEmployee);
-        if (responseDTO != null) {
-            return ResponseEntity.ok(responseDTO);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
 
 
 }
