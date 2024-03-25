@@ -91,7 +91,7 @@ public class ShippingTimeServiceImpl implements ShippingTimeService {
                 .collect(Collectors.toList());
     }
 
-    private boolean existsStores(String storeId1, String storeId2) {
+    public boolean existsStores(String storeId1, String storeId2) {
         Optional<Store> store1 = storeRepository.findById(storeId1);
         Optional<Store> store2 = storeRepository.findById(storeId2);
 
