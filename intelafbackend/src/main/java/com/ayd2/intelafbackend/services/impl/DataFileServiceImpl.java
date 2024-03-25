@@ -1,5 +1,6 @@
 package com.ayd2.intelafbackend.services.impl;
 
+import com.ayd2.intelafbackend.dto.files.DataFileResponseDTO;
 import com.ayd2.intelafbackend.entities.ErrorEntity;
 import com.ayd2.intelafbackend.entities.products.Product;
 import com.ayd2.intelafbackend.entities.products.ProductStore;
@@ -7,33 +8,25 @@ import com.ayd2.intelafbackend.entities.products.ProductStorePK;
 import com.ayd2.intelafbackend.entities.store.ShippingTime;
 import com.ayd2.intelafbackend.entities.store.Store;
 import com.ayd2.intelafbackend.entities.users.Customer;
-import com.ayd2.intelafbackend.exceptions.DateFormatException;
-import com.ayd2.intelafbackend.exceptions.EntityNotFoundException;
-import com.ayd2.intelafbackend.exceptions.ParametersDoNotMatchException;
-import com.ayd2.intelafbackend.exceptions.PhoneNumberSyntaxException;
+import com.ayd2.intelafbackend.exceptions.*;
 import com.ayd2.intelafbackend.repositories.*;
 import com.ayd2.intelafbackend.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 @Service
-public class HandleFileServiceImpl implements HandleFileService {
+public class DataFileServiceImpl implements DataFileService {
 
     private StoreRepository storeRepository;
     private ShippingTimeRepository shippingTimeRepository;
@@ -44,7 +37,7 @@ public class HandleFileServiceImpl implements HandleFileService {
     private OrderRepository orderRepository;
 
     @Autowired
-    public HandleFileServiceImpl(StoreRepository storeRepository, ShippingTimeRepository shippingTimeRepository, ProductRepository productRepository, ProductStoreRepository productStoreRepository, CustomerRepository customerRepository, EmployeeRepository employeeRepository, OrderRepository orderRepository) {
+    public DataFileServiceImpl(StoreRepository storeRepository, ShippingTimeRepository shippingTimeRepository, ProductRepository productRepository, ProductStoreRepository productStoreRepository, CustomerRepository customerRepository, EmployeeRepository employeeRepository, OrderRepository orderRepository) {
         this.storeRepository = storeRepository;
         this.shippingTimeRepository = shippingTimeRepository;
         this.productRepository = productRepository;
@@ -55,7 +48,7 @@ public class HandleFileServiceImpl implements HandleFileService {
     }
 
     @Override
-    public void handleDataFile(MultipartFile file) {
+    public DataFileResponseDTO handleDataFile(MultipartFile file) throws UploadDataFileException {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
             ArrayList<ErrorEntity> errorsList = new ArrayList<>();
             int linesCount = 0;
@@ -69,8 +62,9 @@ public class HandleFileServiceImpl implements HandleFileService {
                     records++;
                 }
             }
+            return new DataFileResponseDTO(records, errorsList);
         } catch (IOException ex) {
-
+            throw new UploadDataFileException("Error to upload datafile");
         }
     }
 
