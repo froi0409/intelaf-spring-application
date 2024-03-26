@@ -14,10 +14,7 @@ import com.ayd2.intelafbackend.exceptions.NotAcceptableException;
 import com.ayd2.intelafbackend.repositories.CustomerRepository;
 import com.ayd2.intelafbackend.repositories.OrderRepository;
 import com.ayd2.intelafbackend.repositories.StoreRepository;
-import com.ayd2.intelafbackend.services.CustomerService;
-import com.ayd2.intelafbackend.services.OrderHasProductService;
-import com.ayd2.intelafbackend.services.OrderService;
-import com.ayd2.intelafbackend.services.PaymentOrderService;
+import com.ayd2.intelafbackend.services.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,14 +31,16 @@ public class OrderServiceImpl implements OrderService {
     private final StoreRepository storeRepository;
     private final PaymentOrderService paymentOrderService;
     private final OrderHasProductService orderHasProductService;
+    private final ProductService productService;
 
     @Autowired
-    public OrderServiceImpl(OrderRepository orderRepository, CustomerRepository customerRepository, StoreRepository storeRepository, PaymentOrderService paymentOrderService, OrderHasProductService orderHasProductService) {
+    public OrderServiceImpl(OrderRepository orderRepository, CustomerRepository customerRepository, StoreRepository storeRepository, PaymentOrderService paymentOrderService, OrderHasProductService orderHasProductService, ProductService productService) {
         this.orderRepository = orderRepository;
         this.customerRepository = customerRepository;
         this.storeRepository = storeRepository;
         this.paymentOrderService = paymentOrderService;
         this.orderHasProductService = orderHasProductService;
+        this.productService = productService;
     }
 
     @Override
@@ -100,8 +99,9 @@ public class OrderServiceImpl implements OrderService {
         //Add products to order
         for (OrderHasProductRequestDTO orderHasProductRequestDTO: orderRequestDTO.getProducts()) {
             orderHasProductService.registerProduct(newOrder, orderHasProductRequestDTO);
+            //Remove from the inventary
+            productService.updateStock(orderHasProductRequestDTO.getProductId(),newOrder.getIdStoreShipping(),orderHasProductRequestDTO.getQuantity());
         }
-
         return new OrderResponseDTO(newOrder);
     }
 

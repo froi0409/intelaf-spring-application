@@ -10,6 +10,7 @@ import com.ayd2.intelafbackend.exceptions.NotAcceptableException;
 import com.ayd2.intelafbackend.repositories.CustomerRepository;
 import com.ayd2.intelafbackend.repositories.SaleRepository;
 import com.ayd2.intelafbackend.services.PaymentSaleService;
+import com.ayd2.intelafbackend.services.ProductService;
 import com.ayd2.intelafbackend.services.SaleHasProductService;
 import com.ayd2.intelafbackend.services.SaleService;
 import jakarta.persistence.EntityNotFoundException;
@@ -28,14 +29,16 @@ public class SaleServiceImpl implements SaleService {
     private final CustomerRepository customerRepository;
     private final PaymentSaleService paymentSaleService;
     private final SaleHasProductService saleHasProductService;
+    private final ProductService productService;
 
 
     @Autowired
-    public SaleServiceImpl(SaleRepository saleRepository, CustomerRepository customerRepository, PaymentSaleService paymentSaleService, SaleHasProductService saleHasProductService) {
+    public SaleServiceImpl(SaleRepository saleRepository, CustomerRepository customerRepository, PaymentSaleService paymentSaleService, SaleHasProductService saleHasProductService, ProductService productService) {
         this.saleRepository = saleRepository;
         this.customerRepository = customerRepository;
         this.paymentSaleService = paymentSaleService;
         this.saleHasProductService = saleHasProductService;
+        this.productService = productService;
     }
 
 
@@ -78,8 +81,9 @@ public class SaleServiceImpl implements SaleService {
         //Add sale_has_product
         for (SaleHasProductRequestDTO saleHasProductRequestDTO : saleRequestDTO.getProducts()) {
             saleHasProductService.registerProduct(newSale, saleHasProductRequestDTO);
+            //CHANGE THE STOCK FOR THE PRODUCTS
+            productService.updateStock(saleHasProductRequestDTO.getProductId(),saleRequestDTO.getStoreCode(),saleHasProductRequestDTO.getQuantity());
         }
-        //CHANGE THE STOCK FOR THE PRODUCTS
 
         return  new SaleResponseDTO(newSale);
     }
