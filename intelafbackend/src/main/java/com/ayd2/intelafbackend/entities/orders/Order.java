@@ -2,6 +2,7 @@ package com.ayd2.intelafbackend.entities.orders;
 
 
 import com.ayd2.intelafbackend.entities.store.Store;
+import com.ayd2.intelafbackend.entities.users.Customer;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,6 +22,9 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_order")
     private Long idOrder;
+
+    @Column(name = "id_customer", nullable = false)
+    private Long idCustomer;
 
     @Column(name = "id_store_shipping", nullable = false)
     private String idStoreShipping;
@@ -48,5 +52,9 @@ public class Order {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_store_receive", referencedColumnName = "id_store", insertable = false, updatable = false)
     private Store receivingStore;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_customer", referencedColumnName = "user_id_user" , nullable = false, insertable = false, updatable = false)
+    private Customer customer;
 
 }

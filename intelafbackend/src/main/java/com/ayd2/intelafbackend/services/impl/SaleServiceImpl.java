@@ -17,6 +17,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -58,13 +59,25 @@ public class SaleServiceImpl implements SaleService {
         newSale.setTotal(saleRequestDTO.getTotal());
         newSale = saleRepository.save(newSale);
          //Add payment_sale
+        BigDecimal usedCredit = BigDecimal.valueOf(0);
         for (PaymentSaleResquestDTO paymentRequestDTO : saleRequestDTO.getPayments()) {
             paymentSaleService.registerPayment(newSale, paymentRequestDTO);
+            if (paymentRequestDTO.getType().equalsIgnoreCase("credit")) {
+                usedCredit = usedCredit.add(BigDecimal.valueOf(paymentRequestDTO.getAmount()));
+            }
         }
         //UPDATE THE CREDITS IF WAS NECESARY
+        // UPDATE CREDITS
+        if (usedCredit.compareTo(BigDecimal.ZERO) > 0) {
+            BigDecimal newCredits = customer.getCredit().subtract(usedCredit);
+            //  actualizar la entidad 'customer'
+            customer.setCredit(newCredits);
+            // 'customer' tiene el nuevo crédito actualizado
+            customerRepository.save(customer);
+        }
         //Add sale_has_product
-        for (SaleHasProductRequestDTO saleHasProductRequestDTO: saleRequestDTO.getProducts()){
-            saleHasProductService.registerProduct(newSale,saleHasProductRequestDTO);
+        for (SaleHasProductRequestDTO saleHasProductRequestDTO : saleRequestDTO.getProducts()) {
+            saleHasProductService.registerProduct(newSale, saleHasProductRequestDTO);
         }
         //CHANGE THE STOCK FOR THE PRODUCTS
 
