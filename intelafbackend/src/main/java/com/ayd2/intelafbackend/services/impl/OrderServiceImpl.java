@@ -2,6 +2,7 @@ package com.ayd2.intelafbackend.services.impl;
 
 import com.ayd2.intelafbackend.dto.order.OrderRequestDTO;
 import com.ayd2.intelafbackend.dto.order.OrderResponseDTO;
+import com.ayd2.intelafbackend.dto.order.deliveryorder.DeliveryOrderResponseDTO;
 import com.ayd2.intelafbackend.dto.order.orderhasproducts.OrderHasProductRequestDTO;
 import com.ayd2.intelafbackend.dto.order.paymentorder.PaymentOrderRequestDTO;
 import com.ayd2.intelafbackend.dto.sale.paymentsale.PaymentSaleResquestDTO;
@@ -11,6 +12,7 @@ import com.ayd2.intelafbackend.entities.store.Store;
 import com.ayd2.intelafbackend.entities.users.Customer;
 import com.ayd2.intelafbackend.exceptions.EntityNotFoundException;
 import com.ayd2.intelafbackend.exceptions.NotAcceptableException;
+import com.ayd2.intelafbackend.projectioninterface.order.DeliveryOrderProjection;
 import com.ayd2.intelafbackend.repositories.CustomerRepository;
 import com.ayd2.intelafbackend.repositories.OrderRepository;
 import com.ayd2.intelafbackend.repositories.StoreRepository;
@@ -20,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -105,5 +108,15 @@ public class OrderServiceImpl implements OrderService {
         return new OrderResponseDTO(newOrder);
     }
 
+    @Override
+    public List<DeliveryOrderResponseDTO> findDeliveryOrdersByReceiveStore(String idStoreReceive) {
+        List<DeliveryOrderProjection> projections = orderRepository.findDeliveryOrdersByReceiveStore(idStoreReceive);
+        List<DeliveryOrderResponseDTO> dtos = new ArrayList<>();
+        for (DeliveryOrderProjection projection : projections) {
+            DeliveryOrderResponseDTO dto = new DeliveryOrderResponseDTO(projection);
+            dtos.add(dto);
+        }
+        return dtos;
+    }
 
 }

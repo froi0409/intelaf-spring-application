@@ -2,16 +2,14 @@ package com.ayd2.intelafbackend.controllers;
 
 import com.ayd2.intelafbackend.dto.order.OrderRequestDTO;
 import com.ayd2.intelafbackend.dto.order.OrderResponseDTO;
+import com.ayd2.intelafbackend.dto.order.deliveryorder.DeliveryOrderResponseDTO;
 import com.ayd2.intelafbackend.exceptions.EntityNotFoundException;
 import com.ayd2.intelafbackend.exceptions.NotAcceptableException;
 import com.ayd2.intelafbackend.services.OrderService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -33,5 +31,11 @@ public class OrderController {
     @PostMapping("create-order")
     public ResponseEntity<OrderResponseDTO> createOrder(@RequestBody OrderRequestDTO orderRequestDTO) throws NotAcceptableException, EntityNotFoundException {
         return ResponseEntity.status(HttpStatus.OK).body(orderService.createOrder(orderRequestDTO));
+    }
+
+    @GetMapping("/receiveStore/{idStoreReceive}")
+    public ResponseEntity<List<DeliveryOrderResponseDTO>> findDeliveryOrdersByReceiveStore(@PathVariable String idStoreReceive) {
+        List<DeliveryOrderResponseDTO> orders = orderService.findDeliveryOrdersByReceiveStore(idStoreReceive);
+        return ResponseEntity.ok(orders);
     }
 }
