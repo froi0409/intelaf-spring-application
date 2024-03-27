@@ -1,5 +1,6 @@
 package com.ayd2.intelafbackend.services.impl;
 
+import com.ayd2.intelafbackend.dto.sale.SaleOrderRequestDTO;
 import com.ayd2.intelafbackend.dto.sale.SaleRequestDTO;
 import com.ayd2.intelafbackend.dto.sale.SaleResponseDTO;
 import com.ayd2.intelafbackend.dto.sale.paymentsale.PaymentSaleResquestDTO;
@@ -19,6 +20,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -86,6 +90,55 @@ public class SaleServiceImpl implements SaleService {
         }
 
         return  new SaleResponseDTO(newSale);
+    }
+
+    @Override
+    @Transactional
+    public SaleResponseDTO registerSaleFromOrder(SaleOrderRequestDTO saleRequestDTO) throws EntityNotFoundException, NotAcceptableException {
+        Customer customer = customerRepository.findByNit(saleRequestDTO.getNit())
+                .orElseThrow(() -> new EntityNotFoundException("customer not found"));
+        Sale newSale = new Sale();
+        newSale.setCustomer(customer);
+        newSale.setDate(saleRequestDTO.getDate());
+        newSale.setTotal(saleRequestDTO.getTotal());
+        newSale = saleRepository.save(newSale);
+
+        BigDecimal payAdvance = BigDecimal.valueOf(0);
+        for (PaymentSaleResquestDTO paymentRequestDTO : saleRequestDTO.getPayments()) {
+            paymentSaleService.registerPayment(newSale, paymentRequestDTO);
+            if (paymentRequestDTO.getType().equalsIgnoreCase("advance")) {
+                payAdvance = payAdvance.add(BigDecimal.valueOf(paymentRequestDTO.getAmount()));
+            }
+        }
+
+        LocalDate dateEntry = saleRequestDTO.getDateEntry().toLocalDate();
+        LocalDate estimatedDeliveryDate = saleRequestDTO.getEstimatedDeliveryDate().toLocalDate();
+        boolean isAfterEntry = dateEntry.isAfter(estimatedDeliveryDate);
+
+        if (isAfterEntry) {
+            //if pay all 5% of credit
+            //if not pay the 2% of credit
+            BigDecimal total = BigDecimal.valueOf(newSale.getTotal());
+            BigDecimal addCredit = BigDecimal.valueOf(0);
+            if (total.compareTo(payAdvance) == 0) {
+                //pay 5%
+                BigDecimal fivePercent = BigDecimal.valueOf(5).divide(BigDecimal.valueOf(100)); // 0.05
+                addCredit = total.multiply(fivePercent);
+            } else {
+                //pay 2%
+                addCredit = total.multiply(BigDecimal.valueOf(0.02));
+            }
+            BigDecimal newCredits = customer.getCredit().add(addCredit);
+            customer.setCredit(newCredits);
+            customerRepository.save(customer);
+        }
+
+        //Add sale_has_product
+        for (SaleHasProductRequestDTO saleHasProductRequestDTO : saleRequestDTO.getProducts()) {
+            saleHasProductService.registerProduct(newSale, saleHasProductRequestDTO);
+        }
+        return  new SaleResponseDTO(newSale);
+
     }
 
 }

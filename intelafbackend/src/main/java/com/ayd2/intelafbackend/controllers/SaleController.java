@@ -1,5 +1,6 @@
 package com.ayd2.intelafbackend.controllers;
 
+import com.ayd2.intelafbackend.dto.sale.SaleOrderRequestDTO;
 import com.ayd2.intelafbackend.dto.sale.SaleRequestDTO;
 import com.ayd2.intelafbackend.dto.sale.SaleResponseDTO;
 import com.ayd2.intelafbackend.exceptions.NotAcceptableException;
@@ -38,7 +39,12 @@ public class SaleController {
                 .body(saleResponseDTO);
     }
 
-
-
+    @PostMapping("/register-order")
+    public ResponseEntity<SaleResponseDTO> registerSaleFromOrder(@RequestBody SaleOrderRequestDTO saleRequestDTO) throws EntityNotFoundException, NotAcceptableException {
+        SaleResponseDTO saleResponseDTO = saleService.registerSaleFromOrder(saleRequestDTO);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(saleResponseDTO);
+    }
 
 }

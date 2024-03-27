@@ -1,13 +1,12 @@
 package com.ayd2.intelafbackend.services.impl;
 
 import com.ayd2.intelafbackend.dto.order.OrderRequestDTO;
+import com.ayd2.intelafbackend.dto.order.OrderRequestUpdateStatusDTO;
 import com.ayd2.intelafbackend.dto.order.OrderResponseDTO;
 import com.ayd2.intelafbackend.dto.order.deliveryorder.DeliveryOrderResponseDTO;
 import com.ayd2.intelafbackend.dto.order.orderhasproducts.OrderHasProductRequestDTO;
 import com.ayd2.intelafbackend.dto.order.paymentorder.PaymentOrderRequestDTO;
-import com.ayd2.intelafbackend.dto.sale.paymentsale.PaymentSaleResquestDTO;
 import com.ayd2.intelafbackend.entities.orders.Order;
-import com.ayd2.intelafbackend.entities.orders.OrderHasProduct;
 import com.ayd2.intelafbackend.entities.store.Store;
 import com.ayd2.intelafbackend.entities.users.Customer;
 import com.ayd2.intelafbackend.exceptions.EntityNotFoundException;
@@ -117,6 +116,38 @@ public class OrderServiceImpl implements OrderService {
             dtos.add(dto);
         }
         return dtos;
+    }
+
+    @Override
+    public List<DeliveryOrderResponseDTO> findDeliveryOrdersByShippingStore(String idStoreShipping) {
+        List<DeliveryOrderProjection> projections = orderRepository.findDeliveryOrdersByShippingStore(idStoreShipping);
+        List<DeliveryOrderResponseDTO> deliverys = new ArrayList<>();
+        for (DeliveryOrderProjection projection : projections) {
+            DeliveryOrderResponseDTO dto = new DeliveryOrderResponseDTO(projection);
+            deliverys.add(dto);
+        }
+        return deliverys;
+    }
+
+    @Override
+    public OrderResponseDTO updateStatus(OrderRequestUpdateStatusDTO orderRequestUpdateStatusDTO) throws EntityNotFoundException {
+        Order order = orderRepository.findById(orderRequestUpdateStatusDTO.getIdOrder())
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Order with code %o not found", orderRequestUpdateStatusDTO.getIdOrder())) );
+        order.setStatus(orderRequestUpdateStatusDTO.getStatus());
+        if(orderRequestUpdateStatusDTO.getDateEntry() != null) {
+            order.setDateEntry(orderRequestUpdateStatusDTO.getDateEntry());
+        }
+        order = orderRepository.save(order);
+        return new OrderResponseDTO(order);
+    }
+
+    @Override
+    public OrderResponseDTO findById(Long idOrder) throws EntityNotFoundException {
+        Order order = orderRepository.findById(idOrder)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Order with code %o not found", idOrder)) );
+
+        return new OrderResponseDTO(order);
+
     }
 
 }

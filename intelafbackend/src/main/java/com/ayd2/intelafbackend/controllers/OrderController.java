@@ -1,6 +1,7 @@
 package com.ayd2.intelafbackend.controllers;
 
 import com.ayd2.intelafbackend.dto.order.OrderRequestDTO;
+import com.ayd2.intelafbackend.dto.order.OrderRequestUpdateStatusDTO;
 import com.ayd2.intelafbackend.dto.order.OrderResponseDTO;
 import com.ayd2.intelafbackend.dto.order.deliveryorder.DeliveryOrderResponseDTO;
 import com.ayd2.intelafbackend.exceptions.EntityNotFoundException;
@@ -28,6 +29,11 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.OK).body(orderService.findAll());
     }
 
+    @GetMapping("/find-order-id/{idOrder}")
+    public ResponseEntity<OrderResponseDTO> findOrderId(@PathVariable Long idOrder) throws EntityNotFoundException {
+        return ResponseEntity.ok(orderService.findById(idOrder));
+    }
+
     @PostMapping("create-order")
     public ResponseEntity<OrderResponseDTO> createOrder(@RequestBody OrderRequestDTO orderRequestDTO) throws NotAcceptableException, EntityNotFoundException {
         return ResponseEntity.status(HttpStatus.OK).body(orderService.createOrder(orderRequestDTO));
@@ -37,5 +43,16 @@ public class OrderController {
     public ResponseEntity<List<DeliveryOrderResponseDTO>> findDeliveryOrdersByReceiveStore(@PathVariable String idStoreReceive) {
         List<DeliveryOrderResponseDTO> orders = orderService.findDeliveryOrdersByReceiveStore(idStoreReceive);
         return ResponseEntity.ok(orders);
+    }
+
+    @GetMapping("/shippingStore/{idStoreShipping}")
+    public ResponseEntity<List<DeliveryOrderResponseDTO>> findDeliveryOrdersByShippingStore(@PathVariable String idStoreShipping) {
+        List<DeliveryOrderResponseDTO> orders = orderService.findDeliveryOrdersByShippingStore(idStoreShipping);
+        return ResponseEntity.ok(orders);
+    }
+
+    @PutMapping("updateStatus")
+    public ResponseEntity<OrderResponseDTO> updateStatus(@RequestBody OrderRequestUpdateStatusDTO orderRequestUpdateStatusDTO) throws EntityNotFoundException {
+        return ResponseEntity.status(HttpStatus.OK).body(orderService.updateStatus(orderRequestUpdateStatusDTO));
     }
 }
