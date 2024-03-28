@@ -4,14 +4,19 @@ import com.ayd2.intelafbackend.dto.order.OrderRequestDTO;
 import com.ayd2.intelafbackend.dto.order.OrderRequestUpdateStatusDTO;
 import com.ayd2.intelafbackend.dto.order.OrderResponseDTO;
 import com.ayd2.intelafbackend.dto.order.deliveryorder.DeliveryOrderResponseDTO;
+import com.ayd2.intelafbackend.dto.order.deliveryorder.OrderAllFeatureResponseDTO;
 import com.ayd2.intelafbackend.dto.order.orderhasproducts.OrderHasProductRequestDTO;
+import com.ayd2.intelafbackend.dto.order.orderhasproducts.OrderHasProductResponseDTO;
 import com.ayd2.intelafbackend.dto.order.paymentorder.PaymentOrderRequestDTO;
+import com.ayd2.intelafbackend.dto.order.paymentorder.PaymentOrderResponseDTO;
 import com.ayd2.intelafbackend.entities.orders.Order;
 import com.ayd2.intelafbackend.entities.store.Store;
 import com.ayd2.intelafbackend.entities.users.Customer;
 import com.ayd2.intelafbackend.exceptions.EntityNotFoundException;
 import com.ayd2.intelafbackend.exceptions.NotAcceptableException;
 import com.ayd2.intelafbackend.projectioninterface.order.DeliveryOrderProjection;
+import com.ayd2.intelafbackend.projectioninterface.order.orderhasproducts.OrderHasProductProjection;
+import com.ayd2.intelafbackend.projectioninterface.order.paymentorder.PaymentOrderProjection;
 import com.ayd2.intelafbackend.repositories.CustomerRepository;
 import com.ayd2.intelafbackend.repositories.OrderRepository;
 import com.ayd2.intelafbackend.repositories.StoreRepository;
@@ -145,9 +150,17 @@ public class OrderServiceImpl implements OrderService {
     public OrderResponseDTO findById(Long idOrder) throws EntityNotFoundException {
         Order order = orderRepository.findById(idOrder)
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Order with code %o not found", idOrder)) );
-
         return new OrderResponseDTO(order);
 
+    }
+    @Override
+    public OrderAllFeatureResponseDTO findByIdWithEstimateDelivery(Long idOrder) throws EntityNotFoundException {
+        DeliveryOrderProjection deliveryOrderProjection = orderRepository.findByIdWithEstimateDelivery(idOrder)
+                .orElseThrow( () -> new EntityNotFoundException(String.format("Order with code %o not found", idOrder)));
+        List<PaymentOrderResponseDTO> paymentOrderProjections = paymentOrderService.findPaymentOrdersByOrderId(deliveryOrderProjection.getId_order());
+        List<OrderHasProductResponseDTO> orderHasProductProjections = orderHasProductService.findProductsOrderByIdOrder(deliveryOrderProjection.getId_order());
+
+        return new OrderAllFeatureResponseDTO(deliveryOrderProjection,orderHasProductProjections,paymentOrderProjections);
     }
 
 }

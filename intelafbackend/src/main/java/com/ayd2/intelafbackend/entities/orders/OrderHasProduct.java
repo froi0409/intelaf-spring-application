@@ -22,7 +22,7 @@ public class OrderHasProduct {
     @JoinColumn(name = "order_id_order", nullable = false, insertable = false, updatable = false)
     private Order order;
 
-    @ManyToOne(fetch =  FetchType.LAZY)
+    @ManyToOne(fetch =  FetchType.EAGER)
     @JoinColumn(name = "product_id_product", nullable = false, insertable = false, updatable = false)
     private Product product;
 }

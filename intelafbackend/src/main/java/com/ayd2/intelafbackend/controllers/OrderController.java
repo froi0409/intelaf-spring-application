@@ -4,6 +4,7 @@ import com.ayd2.intelafbackend.dto.order.OrderRequestDTO;
 import com.ayd2.intelafbackend.dto.order.OrderRequestUpdateStatusDTO;
 import com.ayd2.intelafbackend.dto.order.OrderResponseDTO;
 import com.ayd2.intelafbackend.dto.order.deliveryorder.DeliveryOrderResponseDTO;
+import com.ayd2.intelafbackend.dto.order.deliveryorder.OrderAllFeatureResponseDTO;
 import com.ayd2.intelafbackend.exceptions.EntityNotFoundException;
 import com.ayd2.intelafbackend.exceptions.NotAcceptableException;
 import com.ayd2.intelafbackend.services.OrderService;
@@ -54,5 +55,10 @@ public class OrderController {
     @PutMapping("updateStatus")
     public ResponseEntity<OrderResponseDTO> updateStatus(@RequestBody OrderRequestUpdateStatusDTO orderRequestUpdateStatusDTO) throws EntityNotFoundException {
         return ResponseEntity.status(HttpStatus.OK).body(orderService.updateStatus(orderRequestUpdateStatusDTO));
+    }
+
+    @GetMapping("/find-all-feature-id/{idOrder}")
+    public ResponseEntity<OrderAllFeatureResponseDTO> findByIdWithEstimateDelivery(@PathVariable Long idOrder) throws EntityNotFoundException {
+        return ResponseEntity.ok(orderService.findByIdWithEstimateDelivery(idOrder));
     }
 }

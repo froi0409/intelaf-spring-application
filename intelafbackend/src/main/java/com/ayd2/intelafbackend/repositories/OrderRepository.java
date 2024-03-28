@@ -34,6 +34,16 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "ORDER BY o.id_order ASC", nativeQuery = true)
     List<DeliveryOrderProjection> findDeliveryOrdersByShippingStore(@Param("idStoreShipping") String idStoreShipping);
 
+    @Query(value = "SELECT o.id_order, o.id_store_shipping, o.id_store_receive, o.date_departure, o.date_entry, " +
+            "DATE_ADD(o.date_departure, INTERVAL st.time DAY) AS estimatedDeliveryDate, " +
+            "o.total, o.status " +
+            "FROM intelafdb.order o " +
+            "INNER JOIN shipping_time st ON " +
+            "(o.id_store_shipping = st.id_store1 AND o.id_store_receive = st.id_store2) OR " +
+            "(o.id_store_shipping = st.id_store2 AND o.id_store_receive = st.id_store1) " +
+            "WHERE o.id_order = :idOrder " , nativeQuery = true)
+    Optional<DeliveryOrderProjection> findByIdWithEstimateDelivery(@Param("idOrder") Long idOrder);
+
     @Override
     Optional<Order> findById(Long id);
 
