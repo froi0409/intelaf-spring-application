@@ -36,11 +36,13 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     @Query(value = "SELECT o.id_order, o.id_store_shipping, o.id_store_receive, o.date_departure, o.date_entry, " +
             "DATE_ADD(o.date_departure, INTERVAL st.time DAY) AS estimatedDeliveryDate, " +
-            "o.total, o.status " +
+            "o.total, o.status, u.nit " +
             "FROM intelafdb.order o " +
             "INNER JOIN shipping_time st ON " +
             "(o.id_store_shipping = st.id_store1 AND o.id_store_receive = st.id_store2) OR " +
             "(o.id_store_shipping = st.id_store2 AND o.id_store_receive = st.id_store1) " +
+            "INNER JOIN user u ON " +
+            "u.id_user = o.id_customer " +
             "WHERE o.id_order = :idOrder " , nativeQuery = true)
     Optional<DeliveryOrderProjection> findByIdWithEstimateDelivery(@Param("idOrder") Long idOrder);
 

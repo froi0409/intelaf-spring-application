@@ -23,6 +23,7 @@ public class OrderAllFeatureResponseDTO {
     LocalDateTime estimatedDeliveryDate;
     BigDecimal total;
     String status;
+    String nit;
     List<OrderHasProductResponseDTO> products;
     List<PaymentOrderResponseDTO> payments;
 
@@ -36,6 +37,7 @@ public class OrderAllFeatureResponseDTO {
         this.estimatedDeliveryDate = deliveryOrderProjection.getEstimatedDeliveryDate();
         this.total = deliveryOrderProjection.getTotal();
         this.status = deliveryOrderProjection.getStatus();
+        this.nit = deliveryOrderProjection.getNit();
         this.products = products;
         this.payments = payments;
     }

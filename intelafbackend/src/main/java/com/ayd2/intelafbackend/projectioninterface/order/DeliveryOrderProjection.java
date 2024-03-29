@@ -13,4 +13,6 @@ public interface DeliveryOrderProjection {
     LocalDateTime getEstimatedDeliveryDate();
     BigDecimal getTotal();
     String getStatus();
+
+    String getNit();
 }
