@@ -1,11 +1,14 @@
 package com.ayd2.intelafbackend.services.jwt;
 
 import com.ayd2.intelafbackend.enums.user.Role;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwt;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Service;
 
+import javax.crypto.SecretKey;
 import java.security.Key;
 import java.util.Collection;
 import java.util.Collections;
@@ -19,7 +22,7 @@ public class JwtServiceImpl implements JwtService {
     @Override
     public String generateToken(String username) {
         return Jwts.builder()
-                .claims(Collections.singletonMap("1", Role.ADMIN))
+                .claims(Collections.singletonMap("role", Role.ADMIN))
                 .subject(username)
                 .expiration(new Date(System.currentTimeMillis() + 900000))
                 .issuedAt(new Date(System.currentTimeMillis()))
@@ -27,9 +30,30 @@ public class JwtServiceImpl implements JwtService {
                 .compact();
     }
 
-    private Key getSecretKey() {
+    @Override
+    public String getUsername(String token) {
+        Claims claims = extractClaims(token);
+        return claims.getSubject();
+    }
+
+    @Override
+    public boolean isValid(String token) {
+        Claims claims = extractClaims(token);
+        Date expirationDate = claims.getExpiration();
+
+        return new Date().before(expirationDate);
+    }
+
+    private Claims extractClaims(String token) {
+        return Jwts.parser()
+                .verifyWith(getSecretKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+    }
+
+    private SecretKey getSecretKey() {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_PHASE);
         return Keys.hmacShaKeyFor(keyBytes);
     }
-
 }
