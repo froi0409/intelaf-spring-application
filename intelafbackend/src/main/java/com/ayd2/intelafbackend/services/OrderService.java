@@ -3,6 +3,7 @@ package com.ayd2.intelafbackend.services;
 import com.ayd2.intelafbackend.dto.order.OrderRequestDTO;
 import com.ayd2.intelafbackend.dto.order.OrderRequestUpdateStatusDTO;
 import com.ayd2.intelafbackend.dto.order.OrderResponseDTO;
+import com.ayd2.intelafbackend.dto.order.customer.TrakingOrderResponseDTO;
 import com.ayd2.intelafbackend.dto.order.deliveryorder.DeliveryOrderResponseDTO;
 import com.ayd2.intelafbackend.dto.order.deliveryorder.OrderAllFeatureResponseDTO;
 import com.ayd2.intelafbackend.exceptions.EntityNotFoundException;
@@ -24,4 +25,6 @@ public interface OrderService {
     OrderResponseDTO findById(Long idOrder) throws EntityNotFoundException;
 
     OrderAllFeatureResponseDTO findByIdWithEstimateDelivery(Long idOrder) throws EntityNotFoundException;
+
+    List<TrakingOrderResponseDTO> findOrdersByCustomerId(Long idCustomer) throws EntityNotFoundException;
 }

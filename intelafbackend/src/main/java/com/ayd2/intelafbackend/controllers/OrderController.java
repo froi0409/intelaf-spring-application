@@ -3,6 +3,7 @@ package com.ayd2.intelafbackend.controllers;
 import com.ayd2.intelafbackend.dto.order.OrderRequestDTO;
 import com.ayd2.intelafbackend.dto.order.OrderRequestUpdateStatusDTO;
 import com.ayd2.intelafbackend.dto.order.OrderResponseDTO;
+import com.ayd2.intelafbackend.dto.order.customer.TrakingOrderResponseDTO;
 import com.ayd2.intelafbackend.dto.order.deliveryorder.DeliveryOrderResponseDTO;
 import com.ayd2.intelafbackend.dto.order.deliveryorder.OrderAllFeatureResponseDTO;
 import com.ayd2.intelafbackend.exceptions.EntityNotFoundException;
@@ -60,5 +61,10 @@ public class OrderController {
     @GetMapping("/find-all-feature-id/{idOrder}")
     public ResponseEntity<OrderAllFeatureResponseDTO> findByIdWithEstimateDelivery(@PathVariable Long idOrder) throws EntityNotFoundException {
         return ResponseEntity.ok(orderService.findByIdWithEstimateDelivery(idOrder));
+    }
+
+    @GetMapping("/find-order-customer-id/{idCustomer}")
+    public ResponseEntity<List<TrakingOrderResponseDTO>> findOrdersByCustomerId(@PathVariable Long idCustomer) throws EntityNotFoundException {
+        return ResponseEntity.ok(orderService.findOrdersByCustomerId(idCustomer));
     }
 }

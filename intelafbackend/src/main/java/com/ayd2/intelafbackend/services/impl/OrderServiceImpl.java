@@ -3,6 +3,7 @@ package com.ayd2.intelafbackend.services.impl;
 import com.ayd2.intelafbackend.dto.order.OrderRequestDTO;
 import com.ayd2.intelafbackend.dto.order.OrderRequestUpdateStatusDTO;
 import com.ayd2.intelafbackend.dto.order.OrderResponseDTO;
+import com.ayd2.intelafbackend.dto.order.customer.TrakingOrderResponseDTO;
 import com.ayd2.intelafbackend.dto.order.deliveryorder.DeliveryOrderResponseDTO;
 import com.ayd2.intelafbackend.dto.order.deliveryorder.OrderAllFeatureResponseDTO;
 import com.ayd2.intelafbackend.dto.order.orderhasproducts.OrderHasProductRequestDTO;
@@ -15,8 +16,6 @@ import com.ayd2.intelafbackend.entities.users.Customer;
 import com.ayd2.intelafbackend.exceptions.EntityNotFoundException;
 import com.ayd2.intelafbackend.exceptions.NotAcceptableException;
 import com.ayd2.intelafbackend.projectioninterface.order.DeliveryOrderProjection;
-import com.ayd2.intelafbackend.projectioninterface.order.orderhasproducts.OrderHasProductProjection;
-import com.ayd2.intelafbackend.projectioninterface.order.paymentorder.PaymentOrderProjection;
 import com.ayd2.intelafbackend.repositories.CustomerRepository;
 import com.ayd2.intelafbackend.repositories.OrderRepository;
 import com.ayd2.intelafbackend.repositories.StoreRepository;
@@ -161,6 +160,14 @@ public class OrderServiceImpl implements OrderService {
         List<OrderHasProductResponseDTO> orderHasProductProjections = orderHasProductService.findProductsOrderByIdOrder(deliveryOrderProjection.getId_order());
 
         return new OrderAllFeatureResponseDTO(deliveryOrderProjection,orderHasProductProjections,paymentOrderProjections);
+    }
+
+    @Override
+    public List<TrakingOrderResponseDTO> findOrdersByCustomerId(Long idCustomer) throws EntityNotFoundException{
+        return orderRepository.findOrdersByCustomerId(idCustomer)
+                .stream()
+                .map(TrakingOrderResponseDTO :: new)
+                .collect(Collectors.toList());
     }
 
 }
