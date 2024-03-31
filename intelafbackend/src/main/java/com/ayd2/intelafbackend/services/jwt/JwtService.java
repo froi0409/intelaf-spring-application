@@ -8,4 +8,8 @@ public interface JwtService {
 
     boolean isValid(String token);
 
+    void updateTokenExpiration(String username);
+
+    public boolean isTokenExpired(String username);
+
 }

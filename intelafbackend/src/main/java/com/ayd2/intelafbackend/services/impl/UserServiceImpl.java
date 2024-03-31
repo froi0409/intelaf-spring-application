@@ -54,6 +54,7 @@ public class UserServiceImpl implements UserService {
         newUser.setAddress(userRequestDTO.getAddress());
         newUser.setPassword(userRequestDTO.getPassword());
         newUser.setUsername(userRequestDTO.getUsername());
+        newUser.setRole(userRequestDTO.getRole());
 
         newUser  = userRepository.save(newUser);
         return newUser;

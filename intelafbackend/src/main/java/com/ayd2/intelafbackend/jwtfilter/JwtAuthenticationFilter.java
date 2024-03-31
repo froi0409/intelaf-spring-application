@@ -28,7 +28,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         this.userDetailsService = userDetailsService;
     }
 
+    @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        System.out.println("en filtro");
         String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         String token = null;
         String username = null;
@@ -39,13 +41,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (username == null) {
             filterChain.doFilter(request, response);
+            return;
         }
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-        if (jwtService.isValid(token)) {
-            UsernamePasswordAuthenticationToken authData = new UsernamePasswordAuthenticationToken(userDetails.getUsername(), null, userDetails.getAuthorities());
+        if (!jwtService.isTokenExpired(username)) {
+            UsernamePasswordAuthenticationToken authData
+                    = new UsernamePasswordAuthenticationToken(userDetails.getUsername(), null, userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authData);
+            jwtService.updateTokenExpiration(username);
         }
 
         filterChain.doFilter(request, response);

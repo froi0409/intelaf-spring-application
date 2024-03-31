@@ -1,13 +1,12 @@
 package com.ayd2.intelafbackend.entities.users;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.GenerationType;
+import com.ayd2.intelafbackend.enums.user.Role;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
 
 
 @Entity
@@ -43,4 +42,11 @@ public class User {
 
     @Column(name = "username", nullable = false, length = 45)
     private String username;
+
+    @Column(name = "role")
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    @Column(name = "token_expiration")
+    private LocalDateTime tokenExpiration;
 }
