@@ -72,7 +72,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         if (newEmployee.getRole().startsWith("e") || newEmployee.getRole().startsWith("E")) {
             newUserEntity.setRole(Role.EMPLOYEE);
         } else if (newEmployee.getRole().startsWith("a") || newEmployee.getRole().startsWith("A")) {
-            newUserEntity.setRole(Role.ADMIN);
+            newUserEntity.setRole(Role.ADMINISTRATOR);
         }
 
         newUserEntity = this.userRepository.save(newUserEntity);

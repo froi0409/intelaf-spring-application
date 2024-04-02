@@ -33,9 +33,9 @@ public class JwtServiceImpl implements JwtService {
     }
 
     @Override
-    public String generateToken(String username)     {
+    public String generateToken(String username, Role role)     {
         return Jwts.builder()
-                .claims(Collections.singletonMap("role", Role.ADMIN))
+                .claims(Collections.singletonMap("role", role))
                 .subject(username)
                 .expiration(new Date(System.currentTimeMillis() + 900000))
                 .issuedAt(new Date(System.currentTimeMillis()))
