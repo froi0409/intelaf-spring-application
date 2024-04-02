@@ -180,4 +180,24 @@ public class ProductServiceImpl implements ProductService{
             throw new EntityNotFoundException(String.format("Product with code: %s, not found. Try with other code", id));
         }
     }
+
+    @Override
+    public void updateStock(String id, String storeCode, Integer quantity) throws EntityNotFoundException {
+        String errorEntityNotFoundStr = "";
+        boolean errorEntityNotFound = false;
+        ProductStorePK idProductStore = new ProductStorePK(storeCode,id);
+        Optional<ProductStore> optionalProductStore = productStoreRepository.findById(idProductStore);
+        if (optionalProductStore.isPresent()) {
+            ProductStore productStoreEntity = optionalProductStore.get();
+            productStoreEntity.setStock(productStoreEntity.getStock() - quantity);
+            this.productStoreRepository.save(productStoreEntity);
+        } else {
+            errorEntityNotFound = true;
+            errorEntityNotFoundStr += "Store with ID: "+ idProductStore.getStoreIdStore() + " not found";
+        }
+
+        if (errorEntityNotFound) {
+            throw new EntityNotFoundException(errorEntityNotFoundStr);
+        }
+    }
 }

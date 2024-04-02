@@ -27,4 +27,6 @@ public interface ProductService {
     ProductResponseDTO updateProduct(String id, ProductStoreRequestDTO updatedProduct) throws DuplicatedEntityException, EntityNotFoundException;
     
     ProductStoreResponseDTO findProductById(String id) throws EntityNotFoundException;
+
+    void updateStock(String id, String storeCode, Integer quantity ) throws EntityNotFoundException;
 }
