@@ -50,6 +50,12 @@ public class JwtServiceImpl implements JwtService {
     }
 
     @Override
+    public String getPayload(String token) {
+        Claims claims = extractClaims(token);
+        return claims.toString();
+    }
+
+    @Override
     public boolean isValid(String token) {
         Claims claims = extractClaims(token);
         Date expirationDate = claims.getExpiration();

@@ -8,6 +8,8 @@ public interface JwtService {
 
     String getUsername(String token);
 
+    String getPayload(String token);
+
     boolean isValid(String token);
 
     void updateTokenExpiration(String username);

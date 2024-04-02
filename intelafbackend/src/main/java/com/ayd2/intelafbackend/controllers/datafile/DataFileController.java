@@ -23,6 +23,7 @@ public class DataFileController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<DataFileResponseDTO> uploadDataFile(@RequestParam("file")MultipartFile file) throws UploadDataFileException {
         return ResponseEntity.ok(dataFileService.handleDataFile(file));
     }

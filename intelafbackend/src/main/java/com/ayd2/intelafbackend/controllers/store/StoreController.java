@@ -49,6 +49,7 @@ public class StoreController {
     }
 
     @GetMapping(path = "/getAll")
+    @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<List<StoreResponseDTO>> findAll() {
         return ResponseEntity.ok(storeService.findAll());
     }
