@@ -4,6 +4,7 @@ import com.ayd2.intelafbackend.dto.order.deliveryorder.DeliveryOrderResponseDTO;
 import com.ayd2.intelafbackend.entities.orders.Order;
 import com.ayd2.intelafbackend.projectioninterface.order.DeliveryOrderProjection;
 import com.ayd2.intelafbackend.projectioninterface.order.customer.TrakingOrderProjection;
+import com.ayd2.intelafbackend.projectioninterface.order.reports.OrderByCustomerProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -60,6 +61,14 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "u.id_user = o.id_customer " +
             "WHERE o.id_customer = :idCustomer " , nativeQuery = true)
     List<TrakingOrderProjection> findOrdersByCustomerId(@Param("idCustomer") Long idCustomer);
+    
+    @Query(value = 
+            "SELECT o.id_order, o.id_store_shipping, o.id_store_receive, o.date_departure, o.date_entry, o.total, o.status, u.nit " +
+            "FROM `order` o " +
+            "INNER JOIN user u ON u.id_user = o.id_customer " +
+            "WHERE o.id_customer = :idCustomer " +
+            "AND o.status = 'Route';" , nativeQuery = true)
+    List<OrderByCustomerProjection> findAllOrdersByCustomerId(@Param("idCustomer") Long idCustomer);
 
     @Override
     Optional<Order> findById(Long id);
