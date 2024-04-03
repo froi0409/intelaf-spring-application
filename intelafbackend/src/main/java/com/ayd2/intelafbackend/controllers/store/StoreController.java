@@ -17,6 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/v1/store")
+@PreAuthorize("hasRole('EMPLOYEE')")
 //@CrossOrigin(origins = "http://localhost:3000")
 public class StoreController {
 

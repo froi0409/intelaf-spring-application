@@ -37,7 +37,7 @@ public class JwtServiceImpl implements JwtService {
         return Jwts.builder()
                 .claims(Collections.singletonMap("role", role))
                 .subject(username)
-                .expiration(new Date(System.currentTimeMillis() + 900000))
+                .expiration(new Date(System.currentTimeMillis() + 1800000))
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .signWith(getSecretKey())
                 .compact();

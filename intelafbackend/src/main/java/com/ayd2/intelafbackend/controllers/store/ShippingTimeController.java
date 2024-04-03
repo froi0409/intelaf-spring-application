@@ -17,6 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/v1/shippingtime")
 @CrossOrigin(origins = "http://localhost:3000")
+@PreAuthorize("hasRole('EMPLOYEE')")
 public class ShippingTimeController {
 
     private ShippingTimeService shippingTimeService;
@@ -27,7 +28,6 @@ public class ShippingTimeController {
     }
 
     @GetMapping(path = "/getAll")
-    @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<List<ShippingTimeResponseDTO>> findAll() {
         return ResponseEntity.ok(shippingTimeService.findAll());
     }

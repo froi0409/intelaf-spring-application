@@ -43,7 +43,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             Authentication authentication = authenticationManager.authenticate(authData);
             if (authentication.isAuthenticated()) {
                 jwtService.updateTokenExpiration(authDTO.getUsername());
-                return new JwtResponseDTO(jwtService.generateToken(authDTO.getUsername(), userToAuth.getRole()));
+                return new JwtResponseDTO(jwtService.generateToken(authDTO.getUsername(), userToAuth.getRole()), userToAuth.getRole());
             }
         } catch (AuthenticationException ex) {
             log.error("Error authenticating", ex);

@@ -8,10 +8,12 @@ import com.ayd2.intelafbackend.entities.products.ProductStorePK;
 import com.ayd2.intelafbackend.entities.store.ShippingTime;
 import com.ayd2.intelafbackend.entities.store.Store;
 import com.ayd2.intelafbackend.entities.users.Customer;
+import com.ayd2.intelafbackend.entities.users.User;
 import com.ayd2.intelafbackend.exceptions.*;
 import com.ayd2.intelafbackend.repositories.*;
 import com.ayd2.intelafbackend.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -35,9 +37,11 @@ public class DataFileServiceImpl implements DataFileService {
     private CustomerRepository customerRepository;
     private EmployeeRepository employeeRepository;
     private OrderRepository orderRepository;
+    private UserRepository userRepository;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public DataFileServiceImpl(StoreRepository storeRepository, ShippingTimeRepository shippingTimeRepository, ProductRepository productRepository, ProductStoreRepository productStoreRepository, CustomerRepository customerRepository, EmployeeRepository employeeRepository, OrderRepository orderRepository) {
+    public DataFileServiceImpl(StoreRepository storeRepository, ShippingTimeRepository shippingTimeRepository, ProductRepository productRepository, ProductStoreRepository productStoreRepository, CustomerRepository customerRepository, EmployeeRepository employeeRepository, OrderRepository orderRepository, UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.storeRepository = storeRepository;
         this.shippingTimeRepository = shippingTimeRepository;
         this.productRepository = productRepository;
@@ -45,6 +49,22 @@ public class DataFileServiceImpl implements DataFileService {
         this.customerRepository = customerRepository;
         this.employeeRepository = employeeRepository;
         this.orderRepository = orderRepository;
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    public List<String> verifySystemData() {
+        List<String> itemsToInsert = new ArrayList<>();
+        if (storeRepository.count() <= 0) {
+            itemsToInsert.add("TIENDA");
+        }
+        if (productRepository.count() <= 0) {
+            itemsToInsert.add("PRODUCTO");
+        }
+        if (userRepository.count() < 1) {
+            itemsToInsert.add("USUARIO(S)");
+        }
+        return itemsToInsert;
     }
 
     @Override
@@ -189,7 +209,12 @@ public class DataFileServiceImpl implements DataFileService {
                 throw new NumberFormatException(String.format("El crédito de un cliente debe ser un número entero positivo con dos decimales, valor obtenido: %s", credit));
             }
 
-            Customer customerEntity = new Customer();
+            User userEntity = new User();
+            userEntity.setName(name);
+            userEntity.setNit(nit);
+            userEntity.setPhone(phone);
+            userEntity.setPassword(passwordEncoder.encode(nit));
+            userEntity = userRepository.save(userEntity);
 
         }
     }
