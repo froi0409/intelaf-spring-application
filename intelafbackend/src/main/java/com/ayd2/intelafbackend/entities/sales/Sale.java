@@ -1,5 +1,6 @@
 package com.ayd2.intelafbackend.entities.sales;
 
+import com.ayd2.intelafbackend.entities.store.Store;
 import com.ayd2.intelafbackend.entities.users.Customer;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -35,5 +36,9 @@ public class Sale {
     @ManyToOne
     @JoinColumn(name = "id_customer")
     private Customer customer;
+
+    @ManyToOne
+    @JoinColumn(name = "store_id_store")
+    private Store store;
 
 }

@@ -10,15 +10,14 @@ import com.ayd2.intelafbackend.dto.sale.reports.SaleByIdCustomerResponseDTO;
 import com.ayd2.intelafbackend.dto.sale.reports.SaleHasProductReportResponseDTO;
 import com.ayd2.intelafbackend.dto.sale.salehasproduct.SaleHasProductRequestDTO;
 import com.ayd2.intelafbackend.entities.sales.Sale;
+import com.ayd2.intelafbackend.entities.store.Store;
 import com.ayd2.intelafbackend.entities.users.Customer;
+import com.ayd2.intelafbackend.exceptions.EntityNotFoundException;
 import com.ayd2.intelafbackend.exceptions.NotAcceptableException;
 import com.ayd2.intelafbackend.repositories.CustomerRepository;
 import com.ayd2.intelafbackend.repositories.SaleRepository;
-import com.ayd2.intelafbackend.services.PaymentSaleService;
-import com.ayd2.intelafbackend.services.ProductService;
-import com.ayd2.intelafbackend.services.SaleHasProductService;
-import com.ayd2.intelafbackend.services.SaleService;
-import jakarta.persistence.EntityNotFoundException;
+import com.ayd2.intelafbackend.repositories.StoreRepository;
+import com.ayd2.intelafbackend.services.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,14 +39,17 @@ public class SaleServiceImpl implements SaleService {
     private final SaleHasProductService saleHasProductService;
     private final ProductService productService;
 
+    private final StoreRepository storeRepository;
+
 
     @Autowired
-    public SaleServiceImpl(SaleRepository saleRepository, CustomerRepository customerRepository, PaymentSaleService paymentSaleService, SaleHasProductService saleHasProductService, ProductService productService) {
+    public SaleServiceImpl(SaleRepository saleRepository, CustomerRepository customerRepository, PaymentSaleService paymentSaleService, SaleHasProductService saleHasProductService, ProductService productService, StoreRepository storeRepository) {
         this.saleRepository = saleRepository;
         this.customerRepository = customerRepository;
         this.paymentSaleService = paymentSaleService;
         this.saleHasProductService = saleHasProductService;
         this.productService = productService;
+        this.storeRepository = storeRepository;
     }
 
 
@@ -65,10 +67,14 @@ public class SaleServiceImpl implements SaleService {
         Customer customer = customerRepository.findByNit(saleRequestDTO.getNit())
                 .orElseThrow(() -> new EntityNotFoundException("customer not found"));
 
+        Store store = storeRepository.findById(saleRequestDTO.getStoreCode())
+                .orElseThrow(() -> new EntityNotFoundException("store not found"));
+
         Sale newSale = new Sale();
         newSale.setCustomer(customer);
         newSale.setDate(saleRequestDTO.getDate());
         newSale.setTotal(saleRequestDTO.getTotal());
+        newSale.setStore(store);
         newSale = saleRepository.save(newSale);
          //Add payment_sale
         BigDecimal usedCredit = BigDecimal.valueOf(0);
@@ -102,10 +108,14 @@ public class SaleServiceImpl implements SaleService {
     public SaleResponseDTO registerSaleFromOrder(SaleOrderRequestDTO saleRequestDTO) throws EntityNotFoundException, NotAcceptableException {
         Customer customer = customerRepository.findByNit(saleRequestDTO.getNit())
                 .orElseThrow(() -> new EntityNotFoundException("customer not found"));
+        Store store = storeRepository.findById(saleRequestDTO.getStoreCode())
+                .orElseThrow(() -> new EntityNotFoundException("store not found"));
+
         Sale newSale = new Sale();
         newSale.setCustomer(customer);
         newSale.setDate(saleRequestDTO.getDate());
         newSale.setTotal(saleRequestDTO.getTotal());
+        newSale.setStore(store);
         newSale = saleRepository.save(newSale);
 
         BigDecimal payAdvance = BigDecimal.valueOf(0);
