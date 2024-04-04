@@ -2,16 +2,21 @@ package com.ayd2.intelafbackend.services.impl;
 
 import com.ayd2.intelafbackend.dto.files.DataFileResponseDTO;
 import com.ayd2.intelafbackend.entities.ErrorEntity;
+import com.ayd2.intelafbackend.entities.orders.Order;
 import com.ayd2.intelafbackend.entities.products.Product;
 import com.ayd2.intelafbackend.entities.products.ProductStore;
 import com.ayd2.intelafbackend.entities.products.ProductStorePK;
 import com.ayd2.intelafbackend.entities.store.ShippingTime;
+import com.ayd2.intelafbackend.entities.store.ShippingTimeId;
 import com.ayd2.intelafbackend.entities.store.Store;
 import com.ayd2.intelafbackend.entities.users.Customer;
+import com.ayd2.intelafbackend.entities.users.Employee;
 import com.ayd2.intelafbackend.entities.users.User;
+import com.ayd2.intelafbackend.enums.user.Role;
 import com.ayd2.intelafbackend.exceptions.*;
 import com.ayd2.intelafbackend.repositories.*;
 import com.ayd2.intelafbackend.services.*;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,7 +25,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
@@ -213,17 +220,49 @@ public class DataFileServiceImpl implements DataFileService {
             userEntity.setName(name);
             userEntity.setNit(nit);
             userEntity.setPhone(phone);
+            userEntity.setUsername(nit);
             userEntity.setPassword(passwordEncoder.encode(nit));
+            userEntity.setRole(Role.CUSTOMER);
             userEntity = userRepository.save(userEntity);
 
+            Customer customer = new Customer();
+            customer.setCredit(BigDecimal.valueOf(Double.parseDouble(credit)));
+            customer.setUser(userEntity);
+            customerRepository.save(customer);
         }
     }
 
-    private void handleEmployees(String[] columns, ArrayList<ErrorEntity> errors) throws ParametersDoNotMatchException {
+    private void handleEmployees(String[] columns, ArrayList<ErrorEntity> errors) throws ParametersDoNotMatchException, PhoneNumberSyntaxException {
         if (verifyParameters(5, columns.length, "EMPLEADO")) {
+            String name = columns[1].trim();
+            String idEmployee = columns[2].trim();
+            String phone = columns[3].trim();
+            String dpi = columns[4].trim();
+
+            if (!isPositiveEightDigitInteger(phone)) {
+                throw new PhoneNumberSyntaxException("El número telefonico proporcionado no coincide con un formato válido. Verifica que únicamente se contengan 8 números enteros.");
+            }
+            if (!isPositiveInteger(dpi)) {
+                throw new NumberFormatException("El dpi proporcionado no coincide con un formato válido. Verifica que únicamente se contengan números enteros positivos");
+            }
+
+            User userEntity = new User();
+            userEntity.setName(name);
+            userEntity.setUsername(idEmployee);
+            userEntity.setPassword(passwordEncoder.encode(dpi));
+            userEntity.setPhone(phone);
+            userEntity.setDpi(dpi);
+            userEntity.setRole(Role.EMPLOYEE);
+            userEntity = userRepository.save(userEntity);
+
+            Employee employeeEntity = new Employee();
+            employeeEntity.setRole("employee");
+            employeeEntity.setIdUser(userEntity.getIdUser());
+            employeeRepository.save(employeeEntity);
 
         }
     }
+
 
     private void handleOrders(String[] columns, ArrayList<ErrorEntity> errors) throws ParametersDoNotMatchException, EntityNotFoundException, DateFormatException {
         if (verifyParameters(10, columns.length, "PEDIDO")) {
@@ -238,6 +277,10 @@ public class DataFileServiceImpl implements DataFileService {
             String advance = columns[9].trim();
 
             existsStores(idStore1, idStore2);
+            Product productEntity = productRepository.findById(product)
+                    .orElseThrow(() -> new EntityNotFoundException(String.format("El producto con código %s no existe en el sistema", product)));
+            ShippingTime shippingTimeEntity = shippingTimeRepository.findById(new ShippingTimeId(idStore1, idStore2))
+                    .orElseThrow(() -> new EntityNotFoundException(String.format("No existe un tiempo de envío entre la tienda %s y %s", idStore1, idStore2)));
             if (!isValidDateFormat(date)) {
                 throw new DateFormatException(String.format("La fecha del envío debe estar en formato yyyy-mm-dd. Valor encontrado: %s", date));
             }
@@ -251,7 +294,15 @@ public class DataFileServiceImpl implements DataFileService {
                 throw new NumberFormatException(String.format("El anticipo de una compra debe ser un número entero positivo con dos decimales, valor obtenido: %s", advance));
             }
 
-            // lógica restante
+            int days = shippingTimeEntity.getTime();
+
+            Order orderEntity = new Order();
+            orderEntity.setIdOrder(Long.parseLong(idOrder));
+            orderEntity.setIdStoreShipping(idStore1);
+            orderEntity.setIdStoreReceive(idStore2);
+            orderEntity.setDateDeparture(LocalDateTime.parse(date));
+            orderEntity.setDateEntry(LocalDateTime.parse(addDaysToDate(date, days)));
+
 
         }
     }
@@ -298,6 +349,14 @@ public class DataFileServiceImpl implements DataFileService {
             }
             throw new EntityNotFoundException("Código(s) de tienda inválido(s): " + invalidStoreIds + " do not exist");
         }
+    }
+
+    private static String addDaysToDate(String date, int daysToAdd) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+        LocalDate initialDate = LocalDate.parse(date, formatter);
+        LocalDate finalDate = initialDate.plusDays(daysToAdd);
+
+        return finalDate.format(formatter);
     }
 
 }
