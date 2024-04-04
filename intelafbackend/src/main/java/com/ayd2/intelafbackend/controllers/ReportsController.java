@@ -5,6 +5,7 @@
 package com.ayd2.intelafbackend.controllers;
 
 import com.ayd2.intelafbackend.dto.order.deliveryorder.OrderAllFeatureResponseDTO;
+import com.ayd2.intelafbackend.dto.order.report.OrderInTimeStatusRouteResponseDTO;
 import com.ayd2.intelafbackend.dto.order.reports.OrderReportResponseDTO;
 import com.ayd2.intelafbackend.dto.products.ProductResponseDTO;
 import com.ayd2.intelafbackend.dto.products.reports.ProductBestSellingResponseDTO;
@@ -59,6 +60,21 @@ public class ReportsController {
             @RequestParam("date2") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date2) {
         
         return ResponseEntity.ok(productService.getBestSellingProducts(date1, date2));
+    }
+
+    @GetMapping("/reportInTimeWithPendingVerification/{idStoreReceive}")
+    public ResponseEntity<List<OrderInTimeStatusRouteResponseDTO>> reportInTimeWithPendingVerification(@PathVariable String idStoreReceive) throws EntityNotFoundException {
+        return ResponseEntity.ok(orderService.reportInTimeWithPendingVerification(idStoreReceive));
+    }
+
+    @GetMapping("/reportOverdueArrivingStore/{idStoreReceive}")
+    public ResponseEntity<List<OrderInTimeStatusRouteResponseDTO>> reportOverdueArrivingStore(@PathVariable String idStoreReceive) throws EntityNotFoundException {
+        return ResponseEntity.ok(orderService.reportOverdueArrivingStore(idStoreReceive));
+    }
+
+    @GetMapping("/reportLeavingStoreInTransit/{idStoreShipping}")
+    public ResponseEntity<List<OrderInTimeStatusRouteResponseDTO>> reportLeavingStoreInTransit(@PathVariable String idStoreShipping) throws EntityNotFoundException {
+        return ResponseEntity.ok(orderService.reportLeavingStoreInTransit(idStoreShipping));
     }
     
     
