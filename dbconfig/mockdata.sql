@@ -115,13 +115,13 @@ insert into `intelafdb`.`store_has_employee` (`store_id_store`, `employee_id_use
 insert into `intelafdb`.`store_has_employee` (`store_id_store`, `employee_id_user`) values ('STR-4', 4);
 
 
-insert into `intelafdb`.`order` (`id_order`, `id_store_shipping`, `id_store_receive`, `date_departure`, `date_entry`, `total`, `status`) values (100, 'STR-1', 'STR-2', '2024-03-05 10:00:00', '2024-03-07 15:30:00', 150.00, 'Route');
-insert into `intelafdb`.`order` (`id_order`, `id_store_shipping`, `id_store_receive`, `date_departure`, `date_entry`, `total`, `status`) values (101, 'STR-1', 'STR-2', '2024-03-05 10:30:00', '2024-03-07 10:30:00', 20.00, 'Route');
-insert into `intelafdb`.`order` (`id_order`, `id_store_shipping`, `id_store_receive`, `date_departure`, `date_entry`, `total`, `status`) values (102, 'STR-1', 'STR-2', '2024-03-05 10:35:00', '2024-03-07 10:30:00', 10.00, 'Route');
-insert into `intelafdb`.`order` (`id_order`, `id_store_shipping`, `id_store_receive`, `date_departure`, `date_entry`, `total`, `status`) values (103, 'STR-1', 'STR-3', '2024-03-05 10:00:00', '2024-03-08 10:30:00', 100.00, 'Route');
-insert into `intelafdb`.`order` (`id_order`, `id_store_shipping`, `id_store_receive`, `date_departure`, `date_entry`, `total`, `status`) values (104, 'STR-1', 'STR-3', '2024-03-05 10:30:00', '2024-03-08 10:30:00', 10.00, 'Route');
-insert into `intelafdb`.`order` (`id_order`, `id_store_shipping`, `id_store_receive`, `date_departure`, `date_entry`, `total`, `status`) values (105, 'STR-2', 'STR-5', '2024-03-05 10:00:00', '2024-03-07 10:30:00', 10.00, 'Route');
-insert into `intelafdb`.`order` (`id_order`, `id_store_shipping`, `id_store_receive`, `date_departure`, `date_entry`, `total`, `status`) values (106, 'STR-2', 'STR-5', '2024-03-05 10:30:00', '2024-03-07 10:30:00', 10.00, 'Route');
+insert into `intelafdb`.`order` (`id_order`, `id_customer`, `id_store_shipping`, `id_store_receive`, `date_departure`, `date_entry`, `total`, `status`) values (100,6, 'STR-1', 'STR-2', '2024-03-05 10:00:00', '2024-03-07 15:30:00', 150.00, 'Route');
+insert into `intelafdb`.`order` (`id_order`, `id_customer`, `id_store_shipping`, `id_store_receive`, `date_departure`, `date_entry`, `total`, `status`) values (101,5, 'STR-1', 'STR-2', '2024-03-05 10:30:00', '2024-03-07 10:30:00', 20.00, 'Route');
+insert into `intelafdb`.`order` (`id_order`, `id_customer`, `id_store_shipping`, `id_store_receive`, `date_departure`, `date_entry`, `total`, `status`) values (102,5, 'STR-1', 'STR-2', '2024-03-05 10:35:00', '2024-03-07 10:30:00', 10.00, 'Route');
+insert into `intelafdb`.`order` (`id_order`, `id_customer`, `id_store_shipping`, `id_store_receive`, `date_departure`, `date_entry`, `total`, `status`) values (103,10, 'STR-1', 'STR-3', '2024-03-05 10:00:00', '2024-03-08 10:30:00', 100.00, 'Route');
+insert into `intelafdb`.`order` (`id_order`, `id_customer`, `id_store_shipping`, `id_store_receive`, `date_departure`, `date_entry`, `total`, `status`) values (104,7, 'STR-1', 'STR-3', '2024-03-05 10:30:00', '2024-03-08 10:30:00', 10.00, 'Route');
+insert into `intelafdb`.`order` (`id_order`, `id_customer`, `id_store_shipping`, `id_store_receive`, `date_departure`, `date_entry`, `total`, `status`) values (105,8, 'STR-2', 'STR-5', '2024-03-05 10:00:00', '2024-03-07 10:30:00', 10.00, 'Route');
+insert into `intelafdb`.`order` (`id_order`,`id_customer`, `id_store_shipping`, `id_store_receive`, `date_departure`, `date_entry`, `total`, `status`) values (106,9, 'STR-2', 'STR-5', '2024-03-05 10:30:00', '2024-03-07 10:30:00', 10.00, 'Route');
 
 insert into `intelafdb`.`order_has_product` (`order_id_order`, `product_id_product`, `quantity`) values (100, 'PR-1', 3);
 insert into `intelafdb`.`order_has_product` (`order_id_order`, `product_id_product`, `quantity`) values (101, 'PR-2', 2);

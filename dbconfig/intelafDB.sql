@@ -255,12 +255,19 @@ CREATE TABLE IF NOT EXISTS `intelafdb`.`order` (
   `id_store_shipping` VARCHAR(10) NOT NULL,
   `id_store_receive` VARCHAR(10) NOT NULL,
   `date_departure` DATETIME NOT NULL,
+  `id_customer` INT NOT NULL,
   `date_entry` DATETIME NULL,
   `total` DECIMAL(10,2) NULL,
   `status` VARCHAR(45) NULL,
   PRIMARY KEY (`id_order`),
   INDEX `fk_order_store1_idx` (`id_store_shipping` ASC) VISIBLE,
   INDEX `fk_order_store2_idx` (`id_store_receive` ASC) VISIBLE,
+  INDEX `fk_sale_customer7_idx` (`id_customer` ASC) VISIBLE,
+  CONSTRAINT `fk_sale_customer7_idx`
+    FOREIGN KEY (`id_customer`)
+    REFERENCES `intelafdb`.`customer` (`user_id_user`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
   CONSTRAINT `fk_order_store1`
     FOREIGN KEY (`id_store_shipping`)
     REFERENCES `intelafdb`.`store` (`id_store`)

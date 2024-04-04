@@ -10,11 +10,12 @@ import java.util.List;
 
 @Value
 public class OrderRequestDTO {
+    String nit;
     String idStoreShipping;
     String idStoreReceive;
     LocalDateTime dateDeparture;
     BigDecimal total;
     String status;
-    List<OrderHasProductRequestDTO> orderHasProductRequestDTOS;
-    List<PaymentOrderRequestDTO> paymentOrderRequestDTOS;
+    List<OrderHasProductRequestDTO> products;
+    List<PaymentOrderRequestDTO> payments;
 }

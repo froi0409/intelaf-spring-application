@@ -1,5 +1,6 @@
 package com.ayd2.intelafbackend.services.impl;
 
+import com.ayd2.intelafbackend.dto.sale.reports.SaleHasProductReportResponseDTO;
 import com.ayd2.intelafbackend.dto.sale.salehasproduct.SaleHasProductRequestDTO;
 import com.ayd2.intelafbackend.entities.products.Product;
 import com.ayd2.intelafbackend.entities.sales.Sale;
@@ -11,6 +12,8 @@ import com.ayd2.intelafbackend.repositories.ProductRepository;
 import com.ayd2.intelafbackend.repositories.SaleHasProductRepository;
 import com.ayd2.intelafbackend.services.SaleHasProductService;
 import jakarta.persistence.EntityNotFoundException;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,5 +46,13 @@ public class SaleHasProductServiceImpl implements SaleHasProductService {
         newSaleHasProduct.setSale(sale);
         newSaleHasProduct.setQuantity(saleHasProductRequestDTO.getQuantity());
         saleHasProductRepository.save(newSaleHasProduct);
+    }
+    
+    @Override
+    public List<SaleHasProductReportResponseDTO> findAllSalesByIdSale(Long idSale){
+        return saleHasProductRepository.findAllBySale_IdSale(idSale)
+                .stream()
+                .map(SaleHasProductReportResponseDTO::new)
+                .collect(Collectors.toList());
     }
 }

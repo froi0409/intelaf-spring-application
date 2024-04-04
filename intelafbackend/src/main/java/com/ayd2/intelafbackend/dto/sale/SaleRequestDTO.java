@@ -18,4 +18,5 @@ public class SaleRequestDTO {
     String nit;
     SaleHasProductRequestDTO[] products;
     PaymentSaleResquestDTO[] payments;
+    String storeCode;
 }

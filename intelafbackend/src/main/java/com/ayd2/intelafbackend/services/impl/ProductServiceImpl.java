@@ -11,6 +11,7 @@ import com.ayd2.intelafbackend.dto.products.ProductStoreRequestDTO;
 import com.ayd2.intelafbackend.dto.products.ProductStoreResponseDTO;
 import com.ayd2.intelafbackend.dto.products.StoreProductStoreRequestDTO;
 import com.ayd2.intelafbackend.dto.products.StoreProductStoreResponseDTO;
+import com.ayd2.intelafbackend.dto.products.reports.ProductBestSellingResponseDTO;
 import com.ayd2.intelafbackend.entities.products.Product;
 import com.ayd2.intelafbackend.entities.products.ProductStore;
 import com.ayd2.intelafbackend.entities.products.ProductStorePK;
@@ -20,6 +21,7 @@ import com.ayd2.intelafbackend.repositories.ProductRepository;
 import com.ayd2.intelafbackend.repositories.ProductStoreRepository;
 import com.ayd2.intelafbackend.repositories.StoreRepository;
 import jakarta.persistence.EntityNotFoundException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -179,5 +181,34 @@ public class ProductServiceImpl implements ProductService{
         }else{
             throw new EntityNotFoundException(String.format("Product with code: %s, not found. Try with other code", id));
         }
+    }
+
+    @Override
+    public void updateStock(String id, String storeCode, Integer quantity) throws EntityNotFoundException {
+        String errorEntityNotFoundStr = "";
+        boolean errorEntityNotFound = false;
+        ProductStorePK idProductStore = new ProductStorePK(storeCode,id);
+        Optional<ProductStore> optionalProductStore = productStoreRepository.findById(idProductStore);
+        if (optionalProductStore.isPresent()) {
+            ProductStore productStoreEntity = optionalProductStore.get();
+            productStoreEntity.setStock(productStoreEntity.getStock() - quantity);
+            this.productStoreRepository.save(productStoreEntity);
+        } else {
+            errorEntityNotFound = true;
+            errorEntityNotFoundStr += "Store with ID: "+ idProductStore.getStoreIdStore() + " not found";
+        }
+
+        if (errorEntityNotFound) {
+            throw new EntityNotFoundException(errorEntityNotFoundStr);
+        }
+    }
+    
+    @Override
+    public List<ProductBestSellingResponseDTO> getBestSellingProducts(LocalDate date1,LocalDate date2){
+        
+        return productRepository.findBestSellingProducts(date1,date2)
+                .stream()                
+                .map(ProductBestSellingResponseDTO::new)
+                .collect(Collectors.toList());        
     }
 }
