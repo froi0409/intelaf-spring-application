@@ -1,5 +1,6 @@
 package com.ayd2.intelafbackend.services.impl;
 
+import com.ayd2.intelafbackend.constants.PaymentConstants;
 import com.ayd2.intelafbackend.dto.order.OrderRequestDTO;
 import com.ayd2.intelafbackend.dto.order.OrderRequestUpdateStatusDTO;
 import com.ayd2.intelafbackend.dto.order.OrderResponseDTO;
@@ -11,6 +12,7 @@ import com.ayd2.intelafbackend.dto.order.orderhasproducts.OrderHasProductRespons
 import com.ayd2.intelafbackend.dto.order.paymentorder.PaymentOrderRequestDTO;
 import com.ayd2.intelafbackend.dto.order.paymentorder.PaymentOrderResponseDTO;
 import com.ayd2.intelafbackend.dto.order.reports.OrderReportResponseDTO;
+import com.ayd2.intelafbackend.dto.order.report.OrderInTimeStatusRouteResponseDTO;
 import com.ayd2.intelafbackend.entities.orders.Order;
 import com.ayd2.intelafbackend.entities.store.Store;
 import com.ayd2.intelafbackend.entities.users.Customer;
@@ -167,8 +169,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<TrakingOrderResponseDTO> findOrdersByCustomerId(Long idCustomer) throws EntityNotFoundException{
-        return orderRepository.findOrdersByCustomerId(idCustomer)
+    public List<TrakingOrderResponseDTO> findOrdersByCustomerId(String userUsername) throws EntityNotFoundException{
+        return orderRepository.findOrdersByCustomerId(userUsername)
                 .stream()
                 .map(TrakingOrderResponseDTO :: new)
                 .collect(Collectors.toList());
@@ -194,6 +196,30 @@ public class OrderServiceImpl implements OrderService {
         }
         
         return orders;
+    }
+
+    @Override
+    public List<OrderInTimeStatusRouteResponseDTO> reportInTimeWithPendingVerification(String idStoreReceive) throws EntityNotFoundException{
+        return orderRepository.reportInTimeWithPendingVerification(idStoreReceive)
+                .stream()
+                .map(OrderInTimeStatusRouteResponseDTO :: new)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<OrderInTimeStatusRouteResponseDTO> reportOverdueArrivingStore(String idStoreReceive) throws EntityNotFoundException{
+        return orderRepository.reportOverdueArrivingStore(idStoreReceive)
+                .stream()
+                .map(OrderInTimeStatusRouteResponseDTO :: new)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<OrderInTimeStatusRouteResponseDTO> reportLeavingStoreInTransit(String idStoreShipping) throws EntityNotFoundException{
+        return orderRepository.reportLeavingStoreInTransit(idStoreShipping)
+                .stream()
+                .map(OrderInTimeStatusRouteResponseDTO :: new)
+                .collect(Collectors.toList());
     }
 
 }

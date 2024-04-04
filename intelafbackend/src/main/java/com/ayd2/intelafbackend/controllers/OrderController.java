@@ -6,6 +6,7 @@ import com.ayd2.intelafbackend.dto.order.OrderResponseDTO;
 import com.ayd2.intelafbackend.dto.order.customer.TrakingOrderResponseDTO;
 import com.ayd2.intelafbackend.dto.order.deliveryorder.DeliveryOrderResponseDTO;
 import com.ayd2.intelafbackend.dto.order.deliveryorder.OrderAllFeatureResponseDTO;
+import com.ayd2.intelafbackend.dto.order.report.OrderInTimeStatusRouteResponseDTO;
 import com.ayd2.intelafbackend.exceptions.EntityNotFoundException;
 import com.ayd2.intelafbackend.exceptions.NotAcceptableException;
 import com.ayd2.intelafbackend.services.OrderService;
@@ -63,8 +64,23 @@ public class OrderController {
         return ResponseEntity.ok(orderService.findByIdWithEstimateDelivery(idOrder));
     }
 
-    @GetMapping("/find-order-customer-id/{idCustomer}")
-    public ResponseEntity<List<TrakingOrderResponseDTO>> findOrdersByCustomerId(@PathVariable Long idCustomer) throws EntityNotFoundException {
-        return ResponseEntity.ok(orderService.findOrdersByCustomerId(idCustomer));
+    @GetMapping("/find-order-customer-username/{userUsername}")
+    public ResponseEntity<List<TrakingOrderResponseDTO>> findOrdersByCustomerId(@PathVariable String userUsername) throws EntityNotFoundException {
+        return ResponseEntity.ok(orderService.findOrdersByCustomerId(userUsername));
+    }
+
+    @GetMapping("/reportInTimeWithPendingVerification/{idStoreReceive}")
+    public ResponseEntity<List<OrderInTimeStatusRouteResponseDTO>> reportInTimeWithPendingVerification(@PathVariable String idStoreReceive) throws EntityNotFoundException {
+        return ResponseEntity.ok(orderService.reportInTimeWithPendingVerification(idStoreReceive));
+    }
+
+    @GetMapping("/reportOverdueArrivingStore/{idStoreReceive}")
+    public ResponseEntity<List<OrderInTimeStatusRouteResponseDTO>> reportOverdueArrivingStore(@PathVariable String idStoreReceive) throws EntityNotFoundException {
+        return ResponseEntity.ok(orderService.reportOverdueArrivingStore(idStoreReceive));
+    }
+
+    @GetMapping("/reportLeavingStoreInTransit/{idStoreShipping}")
+    public ResponseEntity<List<OrderInTimeStatusRouteResponseDTO>> reportLeavingStoreInTransit(@PathVariable String idStoreShipping) throws EntityNotFoundException {
+        return ResponseEntity.ok(orderService.reportLeavingStoreInTransit(idStoreShipping));
     }
 }
