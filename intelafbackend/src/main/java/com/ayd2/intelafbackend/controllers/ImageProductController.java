@@ -28,12 +28,12 @@ import org.springframework.web.multipart.MultipartFile;
  * @author waliray
  */
 @RestController
-@PreAuthorize("hasRole('EMPLOYEE')")
 @RequestMapping("/v1/images")
 public class ImageProductController {
     private static String imageDirectory = System.getProperty("user.dir") + "/images/";
     
     @PostMapping("/upload")
+    @PreAuthorize("hasRole('EMPLOYEE')")
     public String createProduct(@RequestParam("image") MultipartFile image,@RequestParam("idProduct") String idProduct){
         try {            
             // Asegúrate de que el directorio de carga exista, si no, créalo
@@ -60,6 +60,7 @@ public class ImageProductController {
     
     
     @GetMapping("/all-images-names")
+    @PreAuthorize("hasRole('EMPLOYEE') OR hasRole('CUSTOMER')")
     public List<String> getAllImageNames() {
         List<String> imageNames = new ArrayList<>();
         try {
@@ -80,6 +81,7 @@ public class ImageProductController {
     }
     
     @GetMapping("/image-by-name/{imageName}")
+    @PreAuthorize("hasRole('EMPLOYEE') OR hasRole('CUSTOMER')")
     public ResponseEntity<Resource> getImage(@PathVariable String imageName) {
         try {
             // Directorio donde se guardan las imágenes

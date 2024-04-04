@@ -17,7 +17,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/v1/store")
-@PreAuthorize("hasRole('EMPLOYEE')")
 //@CrossOrigin(origins = "http://localhost:3000")
 public class StoreController {
 
@@ -29,6 +28,7 @@ public class StoreController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('EMPLOYEE')")
     public ResponseEntity<StoreResponseDTO> createStore(@RequestBody CreateStoreRequestDTO newStore) throws DuplicatedEntityException {
         StoreResponseDTO responseDTO = storeService.createStore(newStore);
 
@@ -38,6 +38,7 @@ public class StoreController {
     }
 
     @PutMapping
+    @PreAuthorize("hasRole('EMPLOYEE')")
     public ResponseEntity<StoreResponseDTO> editDriver(@RequestBody EditStoreRequestDTO storeToUpdate) throws EntityNotFoundException, DuplicatedEntityException {
         StoreResponseDTO responseDTO = storeService.editStore(storeToUpdate);
 
@@ -45,11 +46,13 @@ public class StoreController {
     }
 
     @GetMapping(path = "/{idStore}")
+    @PreAuthorize("hasRole('EMPLOYEE')")
     public ResponseEntity<StoreResponseDTO> findStoreById(@PathVariable String idStore) throws EntityNotFoundException {
         return ResponseEntity.ok(storeService.findById(idStore));
     }
 
     @GetMapping(path = "/getAll")
+    @PreAuthorize("hasRole('EMPLOYEE') OR hasRole('CUSTOMER')")
     public ResponseEntity<List<StoreResponseDTO>> findAll() {
         return ResponseEntity.ok(storeService.findAll());
     }
