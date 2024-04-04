@@ -296,6 +296,7 @@ public class DataFileServiceImpl implements DataFileService {
             userEntity.setName(name);
             userEntity.setUsername(idEmployee);
             userEntity.setPassword(passwordEncoder.encode(dpi));
+            userEntity.setNit("C/F");
             userEntity.setPhone(phone);
             userEntity.setDpi(dpi);
             userEntity.setRole(Role.EMPLOYEE);

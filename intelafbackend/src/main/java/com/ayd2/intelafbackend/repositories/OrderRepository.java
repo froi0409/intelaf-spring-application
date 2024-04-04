@@ -29,8 +29,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "o.total, o.status " +
             "FROM intelafdb.order o " +
             "INNER JOIN shipping_time st ON " +
-            "(o.id_store_shipping = st.id_store1 AND o.id_store_receive = st.id_store2) OR " +
-            "(o.id_store_shipping = st.id_store2 AND o.id_store_receive = st.id_store1) " +
+            "(o.id_store_shipping = st.id_store1 AND o.id_store_receive = st.id_store2) " +
             "WHERE o.id_store_receive = :idStoreReceive " +
             "ORDER BY o.id_order ASC", nativeQuery = true)
     List<DeliveryOrderProjection> findDeliveryOrdersByReceiveStore(@Param("idStoreReceive") String idStoreReceive);
@@ -40,8 +39,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "o.total, o.status " +
             "FROM intelafdb.order o " +
             "INNER JOIN shipping_time st ON " +
-            "(o.id_store_shipping = st.id_store1 AND o.id_store_receive = st.id_store2) OR " +
-            "(o.id_store_shipping = st.id_store2 AND o.id_store_receive = st.id_store1) " +
+            "(o.id_store_shipping = st.id_store1 AND o.id_store_receive = st.id_store2)" +
             "WHERE o.id_store_shipping = :idStoreShipping " +
             "ORDER BY o.id_order ASC", nativeQuery = true)
     List<DeliveryOrderProjection> findDeliveryOrdersByShippingStore(@Param("idStoreShipping") String idStoreShipping);
@@ -51,8 +49,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "o.total, o.status, u.nit " +
             "FROM intelafdb.order o " +
             "INNER JOIN shipping_time st ON " +
-            "(o.id_store_shipping = st.id_store1 AND o.id_store_receive = st.id_store2) OR " +
-            "(o.id_store_shipping = st.id_store2 AND o.id_store_receive = st.id_store1) " +
+            "(o.id_store_shipping = st.id_store1 AND o.id_store_receive = st.id_store2)" +
             "INNER JOIN user u ON " +
             "u.id_user = o.id_customer " +
             "WHERE o.id_order = :idOrder " , nativeQuery = true)
@@ -63,8 +60,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "o.total, o.status " +
             "FROM intelafdb.order o " +
             "INNER JOIN shipping_time st ON " +
-            "(o.id_store_shipping = st.id_store1 AND o.id_store_receive = st.id_store2) OR " +
-            "(o.id_store_shipping = st.id_store2 AND o.id_store_receive = st.id_store1) " +
+            "(o.id_store_shipping = st.id_store1 AND o.id_store_receive = st.id_store2) " +
             "INNER JOIN store ss ON (ss.id_store = o.id_store_shipping) " +
             "INNER JOIN store sr ON (sr.id_store = o.id_store_receive) " +
             "INNER JOIN user u ON " +
@@ -78,8 +74,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "o.total, o.status " +
             "FROM intelafdb.order o " +
             "INNER JOIN shipping_time st ON " +
-            "(o.id_store_shipping = st.id_store1 AND o.id_store_receive = st.id_store2) OR " +
-            "(o.id_store_shipping = st.id_store2 AND o.id_store_receive = st.id_store1) " +
+            "(o.id_store_shipping = st.id_store1 AND o.id_store_receive = st.id_store2) " +
             "INNER JOIN store ss ON (ss.id_store = o.id_store_shipping) " +
             "INNER JOIN store sr ON (sr.id_store = o.id_store_receive) " +
             "INNER JOIN user u ON " +
@@ -102,8 +97,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "o.total, o.status " +
             "FROM intelafdb.order o " +
             "INNER JOIN shipping_time st ON " +
-            "(o.id_store_shipping = st.id_store1 AND o.id_store_receive = st.id_store2) OR " +
-            "(o.id_store_shipping = st.id_store2 AND o.id_store_receive = st.id_store1) " +
+            "(o.id_store_shipping = st.id_store1 AND o.id_store_receive = st.id_store2) " +
             "INNER JOIN store ss ON (ss.id_store = o.id_store_shipping) " +
             "INNER JOIN store sr ON (sr.id_store = o.id_store_receive) " +
             "WHERE o.id_store_receive = :idStoreReceive " +
@@ -117,8 +111,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "o.total, o.status " +
             "FROM intelafdb.order o " +
             "INNER JOIN shipping_time st ON " +
-            "(o.id_store_shipping = st.id_store1 AND o.id_store_receive = st.id_store2) OR " +
-            "(o.id_store_shipping = st.id_store2 AND o.id_store_receive = st.id_store1) " +
+            "(o.id_store_shipping = st.id_store1 AND o.id_store_receive = st.id_store2) " +
             "INNER JOIN store ss ON (ss.id_store = o.id_store_shipping) " +
             "INNER JOIN store sr ON (sr.id_store = o.id_store_receive) " +
             "WHERE o.id_store_receive = :idStoreReceive " +
@@ -132,8 +125,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "o.total, o.status " +
             "FROM intelafdb.order o " +
             "INNER JOIN shipping_time st ON " +
-            "(o.id_store_shipping = st.id_store1 AND o.id_store_receive = st.id_store2) OR " +
-            "(o.id_store_shipping = st.id_store2 AND o.id_store_receive = st.id_store1) " +
+            "(o.id_store_shipping = st.id_store1 AND o.id_store_receive = st.id_store2) " +
             "INNER JOIN store ss ON (ss.id_store = o.id_store_shipping) " +
             "INNER JOIN store sr ON (sr.id_store = o.id_store_receive) " +
             "WHERE o.id_store_shipping = :idStoreShipping " +
