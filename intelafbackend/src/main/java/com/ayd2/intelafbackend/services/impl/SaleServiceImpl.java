@@ -1,5 +1,6 @@
 package com.ayd2.intelafbackend.services.impl;
 
+import com.ayd2.intelafbackend.constants.PaymentConstants;
 import com.ayd2.intelafbackend.dto.sale.SaleOrderRequestDTO;
 import com.ayd2.intelafbackend.dto.sale.SaleRequestDTO;
 import com.ayd2.intelafbackend.dto.sale.SaleResponseDTO;
@@ -69,7 +70,7 @@ public class SaleServiceImpl implements SaleService {
         BigDecimal usedCredit = BigDecimal.valueOf(0);
         for (PaymentSaleResquestDTO paymentRequestDTO : saleRequestDTO.getPayments()) {
             paymentSaleService.registerPayment(newSale, paymentRequestDTO);
-            if (paymentRequestDTO.getType().equalsIgnoreCase("credit")) {
+            if (paymentRequestDTO.getType().equalsIgnoreCase(PaymentConstants.CREDIT)) {
                 usedCredit = usedCredit.add(BigDecimal.valueOf(paymentRequestDTO.getAmount()));
             }
         }
@@ -106,7 +107,7 @@ public class SaleServiceImpl implements SaleService {
         BigDecimal payAdvance = BigDecimal.valueOf(0);
         for (PaymentSaleResquestDTO paymentRequestDTO : saleRequestDTO.getPayments()) {
             paymentSaleService.registerPayment(newSale, paymentRequestDTO);
-            if (paymentRequestDTO.getType().equalsIgnoreCase("advance")) {
+            if (paymentRequestDTO.getType().equalsIgnoreCase(PaymentConstants.ADVANCE)) {
                 payAdvance = payAdvance.add(BigDecimal.valueOf(paymentRequestDTO.getAmount()));
             }
         }

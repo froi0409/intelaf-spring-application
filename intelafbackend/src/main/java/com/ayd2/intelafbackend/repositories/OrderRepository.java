@@ -1,5 +1,6 @@
 package com.ayd2.intelafbackend.repositories;
 
+import com.ayd2.intelafbackend.constants.OrderStatusConstanst;
 import com.ayd2.intelafbackend.dto.order.deliveryorder.DeliveryOrderResponseDTO;
 import com.ayd2.intelafbackend.entities.orders.Order;
 import com.ayd2.intelafbackend.projectioninterface.order.DeliveryOrderProjection;
@@ -110,7 +111,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "INNER JOIN store ss ON (ss.id_store = o.id_store_shipping) " +
             "INNER JOIN store sr ON (sr.id_store = o.id_store_receive) " +
             "WHERE o.id_store_shipping = :idStoreShipping " +
-            "AND o.status IN ('route')"
+            "AND o.status IN ( '"+ OrderStatusConstanst.ROUTE +"' )"
             , nativeQuery = true)
     List<OrderInTimeStatusRouteProjection> reportLeavingStoreInTransit(@Param("idStoreShipping") String idStoreShipping);
 

@@ -1,5 +1,6 @@
 package com.ayd2.intelafbackend.services.impl;
 
+import com.ayd2.intelafbackend.constants.PaymentConstants;
 import com.ayd2.intelafbackend.dto.order.OrderRequestDTO;
 import com.ayd2.intelafbackend.dto.order.OrderRequestUpdateStatusDTO;
 import com.ayd2.intelafbackend.dto.order.OrderResponseDTO;
@@ -88,7 +89,7 @@ public class OrderServiceImpl implements OrderService {
         //Add payment order
         for (PaymentOrderRequestDTO paymentOrderRequestDTO : orderRequestDTO.getPayments()) {
             paymentOrderService.registerPayment(newOrder, paymentOrderRequestDTO);
-            if (paymentOrderRequestDTO.getType().equalsIgnoreCase("credit")) {
+            if (paymentOrderRequestDTO.getType().equalsIgnoreCase(PaymentConstants.CREDIT)) {
                 usedCredit = usedCredit.add(BigDecimal.valueOf(paymentOrderRequestDTO.getAmount()));
 
             }
