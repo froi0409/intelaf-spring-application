@@ -37,7 +37,6 @@ public class CustomerController {
     }
 
     @GetMapping("findById/{nit}")
-    @PreAuthorize("hasRole('EMPLOYEE')")
     public ResponseEntity<CustomerResponseNameAddrbyNItDTO> findByNIt(@PathVariable String nit) throws EntityNotFoundException {
         CustomerResponseNameAddrbyNItDTO customerResponseNameAddrbyNItDTO = customerService.findByNIt(new CustomerRequestNitDTO(nit));
         return ResponseEntity.status(HttpStatus.OK).body(customerResponseNameAddrbyNItDTO);

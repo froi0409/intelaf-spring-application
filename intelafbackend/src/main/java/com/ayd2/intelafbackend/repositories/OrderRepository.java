@@ -107,7 +107,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "INNER JOIN store ss ON (ss.id_store = o.id_store_shipping) " +
             "INNER JOIN store sr ON (sr.id_store = o.id_store_receive) " +
             "WHERE o.id_store_receive = :idStoreReceive " +
-            "AND DATE_ADD(o.date_departure, INTERVAL st.time DAY) = CURDATE()" +
+            "AND DATE_ADD(o.date_departure, INTERVAL st.time DAY) >= CURDATE()" +
             "AND o.status IN ('route', 'pending')"
             , nativeQuery = true)
     List<OrderInTimeStatusRouteProjection> reportInTimeWithPendingVerification(@Param("idStoreReceive") String idStoreReceive);
