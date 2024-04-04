@@ -183,7 +183,13 @@ public class DataFileServiceImpl implements DataFileService {
             shippingTimeEntity.setIdStore2(idStore2);
             shippingTimeEntity.setTime(Integer.parseInt(time));
 
+            ShippingTime shippingTimeEntityReverse = new ShippingTime();
+            shippingTimeEntityReverse.setIdStore1(idStore2);
+            shippingTimeEntityReverse.setIdStore2(idStore1);
+            shippingTimeEntityReverse.setTime(Integer.parseInt(time));
+
             shippingTimeRepository.save(shippingTimeEntity);
+            shippingTimeRepository.save(shippingTimeEntityReverse);
         }
     }
 

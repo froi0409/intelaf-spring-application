@@ -241,7 +241,7 @@ public class OrderServiceImpl implements OrderService {
         List<OrderDetail> result = new ArrayList<>();
         for (Object[] order : ordersNotArrived) {
             OrderDetail orderDetail = new OrderDetail();
-            orderDetail.setOrderId((Long) order[0]);
+            orderDetail.setIdOrder((Long) order[0]);
             orderDetail.setProductDescription((String) order[1]);
             orderDetail.setTotal(Double.parseDouble(order[2].toString()));
             orderDetail.setStatus((String) order[3]);

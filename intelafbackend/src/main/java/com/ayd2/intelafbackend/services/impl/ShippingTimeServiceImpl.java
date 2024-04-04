@@ -32,14 +32,27 @@ public class ShippingTimeServiceImpl implements ShippingTimeService {
     }
 
     @Override
-    public ShippingTimeResponseDTO createShippingTime(CreateShippingTimeRequestDTO newShippingTime) throws EntityNotFoundException {
+    public ShippingTimeResponseDTO createShippingTime(CreateShippingTimeRequestDTO newShippingTime) throws EntityNotFoundException, DuplicatedEntityException {
         if (existsStores(newShippingTime.getIdStore1(), newShippingTime.getIdStore2())) {
+            Optional<ShippingTime> spAB = shippingTimeRepository.findById(new ShippingTimeId(newShippingTime.getIdStore1(), newShippingTime.getIdStore2()));
+            Optional<ShippingTime> spBA = shippingTimeRepository.findById(new ShippingTimeId(newShippingTime.getIdStore2(), newShippingTime.getIdStore1()));
+            if (spAB.isPresent() || spAB.isPresent()) {
+                throw new DuplicatedEntityException(String.format("El tiempo entre las tiedas %s y %s ya se encuentra en el sistema", newShippingTime.getIdStore1(), newShippingTime.getIdStore2()));
+            }
+
             ShippingTime shippingTimeEntity = new ShippingTime();
             shippingTimeEntity.setIdStore1(newShippingTime.getIdStore1());
             shippingTimeEntity.setIdStore2(newShippingTime.getIdStore2());
             shippingTimeEntity.setTime(newShippingTime.getTime());
 
             shippingTimeEntity = shippingTimeRepository.save(shippingTimeEntity);
+
+            ShippingTime shippingTimeEntityReverse = new ShippingTime();
+            shippingTimeEntityReverse.setIdStore1(newShippingTime.getIdStore2());
+            shippingTimeEntityReverse.setIdStore2(newShippingTime.getIdStore1());
+            shippingTimeEntityReverse.setTime(newShippingTime.getTime());
+
+            shippingTimeRepository.save(shippingTimeEntityReverse);
 
             return new ShippingTimeResponseDTO(shippingTimeEntity);
 
@@ -56,8 +69,15 @@ public class ShippingTimeServiceImpl implements ShippingTimeService {
             ShippingTime shippingTimeEntity = shippingTimeRepository.findById(new ShippingTimeId(idStore1, idStore2))
                     .orElseThrow(() -> new EntityNotFoundException(String.format("Shipping time between %s and %s does not exists", idStore1, idStore2)));
 
+            Optional<ShippingTime> shippingTimeEntityReverse = shippingTimeRepository.findById(new ShippingTimeId(idStore2, idStore1));
+
             if (!Objects.equals(shippingTimeEntity.getTime(), shippingTimeToEdit.getTime())) {
                 shippingTimeEntity.setTime(shippingTimeToEdit.getTime());
+            }
+
+            if (shippingTimeEntityReverse.isPresent()) {
+                shippingTimeEntityReverse.get().setTime(shippingTimeToEdit.getTime());
+                shippingTimeRepository.save(shippingTimeEntityReverse.get());
             }
 
             shippingTimeRepository.save(shippingTimeEntity);
