@@ -19,7 +19,7 @@ public class User {
     @Column(name = "id_user", nullable = false)
     private Long idUser;
 
-    @Column(name = "nit", nullable = false)
+    @Column(name = "nit")
     private String nit;
 
     @Column(name = "name", nullable = false, length = 100)
