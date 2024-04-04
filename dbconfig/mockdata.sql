@@ -29,8 +29,8 @@ insert into `intelafdb`.`product` (`id_product`, `name`, `manufacturer`, `price`
 insert into `intelafdb`.`product` (`id_product`, `name`, `manufacturer`, `price`, `description`, `guaranty_months`) values ('PR-12', 'Product 12', 'Manufacturer D', 57.00, 'Description for Product 12', 5);
 
 
-insert into `intelafdb`.`user` (`nit`, `name`, `phone`, `dpi`, `email`, `address`, `password`, `username`) values ('123456789', 'Juan', '12345678', '1234567890123', 'user1@example.com', '543 Plaza Trail', 'password1', 'user1');
-insert into `intelafdb`.`user` (`nit`, `name`, `phone`, `dpi`, `email`, `address`, `password`, `username`) values ('987654321', 'Pedro', '87654321', '8745412325415', 'user2@example.com', '25 Morning Plaza', 'password2', 'user2');
+insert into `intelafdb`.`user` (`nit`, `name`, `phone`, `dpi`, `email`, `address`, `password`, `username`, `role`) values ('123456789', 'Juan', '12345678', '1234567890123', 'user1@example.com', '543 Plaza Trail', '$2a$04$064AdWzIBacAYtjauLY07ekMqA/IpbOwl75jGnSHJ6JpBNqVc/PJi', 'user1', 'ADMINISTRATOR');
+insert into `intelafdb`.`user` (`nit`, `name`, `phone`, `dpi`, `email`, `address`, `password`, `username`, `role`) values ('987654321', 'Pedro', '87654321', '8745412325415', 'user2@example.com', '25 Morning Plaza', '$2a$04$iYWvz90yuGvDmFQo8Sgufe/zUQYp4di3znOpIkeR9XA/UiTzJbRnK', 'user2', 'EMPLOYEE');
 insert into `intelafdb`.`user` (`nit`, `name`, `phone`, `dpi`, `email`, `address`, `password`, `username`) values ('152478455', 'Maria', '33354125', '9876543210987', 'user3@example.com', '865 Morning Trail', 'password3', 'user3');
 insert into `intelafdb`.`user` (`nit`, `name`, `phone`, `dpi`, `email`, `address`, `password`, `username`) values ('145785694', 'Robert', '35687458', '7854785412565', 'user4@example.com', '865 Delfino Plaza', 'password4', 'user4');
 insert into `intelafdb`.`user` (`nit`, `name`, `phone`, `dpi`, `email`, `address`, `password`, `username`) values ('124515784', 'Jhon', '36587458', '5214523658745', 'user5@example.com', '87 Star Trail', 'password5', 'user5');
@@ -38,7 +38,7 @@ insert into `intelafdb`.`user` (`nit`, `name`, `phone`, `dpi`, `email`, `address
 insert into `intelafdb`.`user` (`nit`, `name`, `phone`, `dpi`, `email`, `address`, `password`, `username`) values ('587458965', 'David', '36589658', '7845962352415', 'user7@example.com', '78 Crossing Streets', 'password7', 'user7');
 insert into `intelafdb`.`user` (`nit`, `name`, `phone`, `dpi`, `email`, `address`, `password`, `username`) values ('457845214', 'Richard', '36987589', '7485859632415', 'user8@example.com', '94 Gatsby Drive', 'password8', 'user8');
 insert into `intelafdb`.`user` (`nit`, `name`, `phone`, `dpi`, `email`, `address`, `password`, `username`) values ('458685745', 'Daniel', '36587589', '1452454587485', 'user9@example.com', '865 Morning Trail', 'password9', 'user9');
-insert into `intelafdb`.`user` (`nit`, `name`, `phone`, `dpi`, `email`, `address`, `password`, `username`) values ('142574586', 'Mateo', '35685365', '1452638596745', 'user10@example.com', '865 Morning Trail', 'password10', 'user10');
+insert into `intelafdb`.`user` (`nit`, `name`, `phone`, `dpi`, `email`, `address`, `password`, `username`, `role`) values ('142574586', 'Mateo', '35685365', '1452638596745', 'user10@example.com', '865 Morning Trail', '$2a$04$.CoG8Of51NopkrPP5ZFJIe2ap.CjizUgofhFruELvATl8k/J4fGcu', 'user10', 'CUSTOMER');
 
 insert into `intelafdb`.`employee` (`id_user`, `role`) values (1, 'admin');
 insert into `intelafdb`.`employee` (`id_user`, `role`) values (2, 'employee');
