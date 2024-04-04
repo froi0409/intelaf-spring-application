@@ -165,8 +165,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<TrakingOrderResponseDTO> findOrdersByCustomerId(String userUsername) throws EntityNotFoundException{
-        return orderRepository.findOrdersByCustomerId(userUsername)
+    public List<TrakingOrderResponseDTO> findOrdersByCustomerUsername(String userUsername) throws EntityNotFoundException{
+        return orderRepository.findOrdersByCustomerUsername(userUsername)
                 .stream()
                 .map(TrakingOrderResponseDTO :: new)
                 .collect(Collectors.toList());

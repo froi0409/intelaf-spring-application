@@ -69,7 +69,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "INNER JOIN user u ON " +
             "u.id_user = o.id_customer " +
             "WHERE u.username = :userUsername " , nativeQuery = true)
-    List<TrakingOrderProjection> findOrdersByCustomerId(@Param("userUsername") String userUsername);
+    List<TrakingOrderProjection> findOrdersByCustomerUsername(@Param("userUsername") String userUsername);
 
     @Query(value = "SELECT o.id_order, ss.name as name_store_shipping, sr.name as name_store_receive, o.date_departure, " +
             "DATE_ADD(o.date_departure, INTERVAL st.time DAY) AS estimatedDeliveryDate, " +
