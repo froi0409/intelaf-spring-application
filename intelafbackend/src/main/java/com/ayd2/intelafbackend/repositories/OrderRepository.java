@@ -141,6 +141,20 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             , nativeQuery = true)
     List<OrderInTimeStatusRouteProjection> reportLeavingStoreInTransit(@Param("idStoreShipping") String idStoreShipping);
 
+    @Query("SELECT o.idOrder AS order_id, " +
+            "CONCAT(p.idProduct, ':', p.name, ' (', ohp.quantiy, ' units)') AS order_detail, " +
+            "o.total AS total, " +
+            "o.status AS status " +
+            "FROM Order o " +
+            "JOIN order_has_product ohp ON o.idOrder = ohp.order.idOrder " +
+            "JOIN product p ON ohp.product.idProduct = p.idProduct " +
+            "WHERE (o.status = 'Route' OR o.status = 'route' OR o.status = 'pending')" +
+            "AND o.idStoreReceive = :idStoreRecieve " +
+            "GROUP BY o.idOrder, p.idProduct, p.name, ohp.quantiy, o.total, o.status")
+    List<Object[]> reportOrdersNotArrivedAtStore(@Param("idStoreRecieve") String idStore);
+
+
+
     @Override
     Optional<Order> findById(Long id);
 

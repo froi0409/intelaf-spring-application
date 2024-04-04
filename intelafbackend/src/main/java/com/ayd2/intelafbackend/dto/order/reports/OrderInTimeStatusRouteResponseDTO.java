@@ -1,4 +1,4 @@
-package com.ayd2.intelafbackend.dto.order.report;
+package com.ayd2.intelafbackend.dto.order.reports;
 
 import com.ayd2.intelafbackend.projectioninterface.order.customer.TrakingOrderProjection;
 import com.ayd2.intelafbackend.projectioninterface.order.report.OrderInTimeStatusRouteProjection;

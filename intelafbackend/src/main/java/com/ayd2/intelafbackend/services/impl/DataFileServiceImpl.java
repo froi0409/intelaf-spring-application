@@ -3,6 +3,9 @@ package com.ayd2.intelafbackend.services.impl;
 import com.ayd2.intelafbackend.dto.files.DataFileResponseDTO;
 import com.ayd2.intelafbackend.entities.ErrorEntity;
 import com.ayd2.intelafbackend.entities.orders.Order;
+import com.ayd2.intelafbackend.entities.orders.OrderHasProduct;
+import com.ayd2.intelafbackend.entities.orders.OrderHasProductPK;
+import com.ayd2.intelafbackend.entities.orders.PaymentOrder;
 import com.ayd2.intelafbackend.entities.products.Product;
 import com.ayd2.intelafbackend.entities.products.ProductStore;
 import com.ayd2.intelafbackend.entities.products.ProductStorePK;
@@ -29,6 +32,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,11 +48,13 @@ public class DataFileServiceImpl implements DataFileService {
     private CustomerRepository customerRepository;
     private EmployeeRepository employeeRepository;
     private OrderRepository orderRepository;
+    private PaymentOrderRepository paymentOrderRepository;
+    private OrderHasProductRepository orderHasProductRepository;
     private UserRepository userRepository;
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public DataFileServiceImpl(StoreRepository storeRepository, ShippingTimeRepository shippingTimeRepository, ProductRepository productRepository, ProductStoreRepository productStoreRepository, CustomerRepository customerRepository, EmployeeRepository employeeRepository, OrderRepository orderRepository, UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public DataFileServiceImpl(StoreRepository storeRepository, ShippingTimeRepository shippingTimeRepository, ProductRepository productRepository, ProductStoreRepository productStoreRepository, CustomerRepository customerRepository, EmployeeRepository employeeRepository, OrderRepository orderRepository, PaymentOrderRepository paymentOrderRepository, OrderHasProductRepository orderHasProductRepository, UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.storeRepository = storeRepository;
         this.shippingTimeRepository = shippingTimeRepository;
         this.productRepository = productRepository;
@@ -56,6 +62,8 @@ public class DataFileServiceImpl implements DataFileService {
         this.customerRepository = customerRepository;
         this.employeeRepository = employeeRepository;
         this.orderRepository = orderRepository;
+        this.paymentOrderRepository = paymentOrderRepository;
+        this.orderHasProductRepository = orderHasProductRepository;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -68,7 +76,7 @@ public class DataFileServiceImpl implements DataFileService {
         if (productRepository.count() <= 0) {
             itemsToInsert.add("PRODUCTO");
         }
-        if (userRepository.count() < 1) {
+        if (userRepository.count() <= 1) {
             itemsToInsert.add("USUARIO(S)");
         }
         return itemsToInsert;
@@ -110,23 +118,35 @@ public class DataFileServiceImpl implements DataFileService {
             } else if (columns[0].equalsIgnoreCase("PEDIDO")) {
                 handleOrders(columns, errorsList);
             } else {
-                errorsList.add(new ErrorEntity(line, "Syntax", ""));
+                if (!columns[0].trim().equals("")) {
+                    errorsList.add(new ErrorEntity(line, "Syntax", "Entidad desconocida"));
+                }
             }
             return true;
         } catch (ParametersDoNotMatchException | PhoneNumberSyntaxException | NumberFormatException | DateFormatException ex) {
             errorsList.add(new ErrorEntity(line, "Syntax", ex.getMessage()));
         } catch (EntityNotFoundException ex) {
             errorsList.add(new ErrorEntity(line, "Entity Not Found", ex.getMessage()));
+        } catch (DuplicatedEntityException ex) {
+            errorsList.add(new ErrorEntity(line, "Duplicated Entity", ex.getMessage()));
+        } catch (Exception ex) {
+            System.err.println("Error al leer entidad: " + ex.getMessage());
+            ex.printStackTrace();
         }
         return false;
     }
     
-    private void handleStores(String[] columns) throws ParametersDoNotMatchException, PhoneNumberSyntaxException {
+    private void handleStores(String[] columns) throws ParametersDoNotMatchException, PhoneNumberSyntaxException, DuplicatedEntityException {
         if (verifyParameters(5, columns.length, "TIENDA")) {
             String name = columns[1].trim();
             String address = columns[2].trim();
             String idStore = columns[3].trim();
             String phone = columns[4].trim();
+
+            Optional<Store> storeOptional = storeRepository.findById(idStore);
+            if (storeOptional.isPresent()) {
+                throw new DuplicatedEntityException(String.format("La tienda con id %s ya existe en el sistema", idStore));
+            }
 
             if (!isPositiveEightDigitInteger(phone)) {
                 throw new PhoneNumberSyntaxException("El número telefonico proporcionado no coincide con un formato válido. Verifica que únicamente se contengan 8 números enteros.");
@@ -142,13 +162,18 @@ public class DataFileServiceImpl implements DataFileService {
         }
     }
 
-    private void handleShippingTimes(String[] columns, ArrayList<ErrorEntity> errors) throws ParametersDoNotMatchException, EntityNotFoundException, NumberFormatException {
+    private void handleShippingTimes(String[] columns, ArrayList<ErrorEntity> errors) throws ParametersDoNotMatchException, EntityNotFoundException, NumberFormatException, DuplicatedEntityException {
         if (verifyParameters(4, columns.length, "TIEMPO")) {
             String idStore1 = columns[1].trim();
             String idStore2 = columns[2].trim();
             String time = columns[3].trim();
 
             existsStores(idStore1, idStore2);
+            Optional<ShippingTime> shippingTimeOptional = shippingTimeRepository.findById(new ShippingTimeId(idStore1, idStore2));
+            if(shippingTimeOptional.isPresent()) {
+                throw new DuplicatedEntityException(String.format("El tiempo entre la tienda %s y %s ya existe en el sistema", idStore1, idStore2));
+            }
+
             if (!isPositiveInteger(time)) {
                 throw new NumberFormatException("El tiempo entre tiendas debe ser un número entero positivo. Valor obtenido: " + time);
             }
@@ -158,7 +183,13 @@ public class DataFileServiceImpl implements DataFileService {
             shippingTimeEntity.setIdStore2(idStore2);
             shippingTimeEntity.setTime(Integer.parseInt(time));
 
+            ShippingTime shippingTimeEntityReverse = new ShippingTime();
+            shippingTimeEntityReverse.setIdStore1(idStore2);
+            shippingTimeEntityReverse.setIdStore2(idStore1);
+            shippingTimeEntityReverse.setTime(Integer.parseInt(time));
+
             shippingTimeRepository.save(shippingTimeEntity);
+            shippingTimeRepository.save(shippingTimeEntityReverse);
         }
     }
 
@@ -178,7 +209,7 @@ public class DataFileServiceImpl implements DataFileService {
             if (!isPositiveInteger(stock)) {
                 throw new NumberFormatException(String.format("La cantidad de un producto debe ser un número entero positivo, valor obtenido: %s", stock));
             }
-            if (!isValidMoneyFormat(idStore)) {
+            if (!isValidMoneyFormat(price)) {
                 throw new NumberFormatException(String.format("El precio de un producto debe ser un número entero positivo con dos decimales, valor obtenido: %s", price));
             }
 
@@ -202,12 +233,17 @@ public class DataFileServiceImpl implements DataFileService {
         }
     }
 
-    private void handleCustomers(String[] columns, ArrayList<ErrorEntity> errors) throws ParametersDoNotMatchException, PhoneNumberSyntaxException {
+    private void handleCustomers(String[] columns, ArrayList<ErrorEntity> errors) throws ParametersDoNotMatchException, PhoneNumberSyntaxException, DuplicatedEntityException {
         if (verifyParameters(5, columns.length, "CLIENTE")) {
             String name = columns[1].trim();
             String nit = columns[2].trim();
             String phone = columns[3].trim();
             String credit = columns[4].trim();
+
+            Optional<Customer> customerOptional = customerRepository.findByNit(nit);
+            if (customerOptional.isPresent()) {
+                throw new DuplicatedEntityException(String.format("El cliente con NIT %s ya se encuentra en el sistema", nit));
+            }
 
             if (!isPositiveEightDigitInteger(phone)) {
                 throw new PhoneNumberSyntaxException("El número telefonico proporcionado no coincide con un formato válido. Verifica que únicamente se contengan 8 números enteros.");
@@ -232,12 +268,22 @@ public class DataFileServiceImpl implements DataFileService {
         }
     }
 
-    private void handleEmployees(String[] columns, ArrayList<ErrorEntity> errors) throws ParametersDoNotMatchException, PhoneNumberSyntaxException {
+    private void handleEmployees(String[] columns, ArrayList<ErrorEntity> errors) throws ParametersDoNotMatchException, PhoneNumberSyntaxException, DuplicatedEntityException {
         if (verifyParameters(5, columns.length, "EMPLEADO")) {
             String name = columns[1].trim();
             String idEmployee = columns[2].trim();
             String phone = columns[3].trim();
             String dpi = columns[4].trim();
+
+            Optional<Employee> employeeOptionalId = employeeRepository.findById(Long.parseLong(idEmployee));
+            Optional<User> userOptional = userRepository.findFirstByDpi(dpi);
+
+            if (employeeOptionalId.isPresent()) {
+                throw new DuplicatedEntityException(String.format("Ya existe un empleado con código %s en el sistema", idEmployee));
+            }
+            if (userOptional.isPresent()) {
+                throw new DuplicatedEntityException(String.format("Ya existe un usuario con el dpi %s en el sistema", dpi));
+            }
 
             if (!isPositiveEightDigitInteger(phone)) {
                 throw new PhoneNumberSyntaxException("El número telefonico proporcionado no coincide con un formato válido. Verifica que únicamente se contengan 8 números enteros.");
@@ -264,7 +310,7 @@ public class DataFileServiceImpl implements DataFileService {
     }
 
 
-    private void handleOrders(String[] columns, ArrayList<ErrorEntity> errors) throws ParametersDoNotMatchException, EntityNotFoundException, DateFormatException {
+    private void handleOrders(String[] columns, ArrayList<ErrorEntity> errors) throws ParametersDoNotMatchException, EntityNotFoundException, DateFormatException, DuplicatedEntityException {
         if (verifyParameters(10, columns.length, "PEDIDO")) {
             String idOrder = columns[1].trim();
             String idStore1 = columns[2].trim();
@@ -276,11 +322,21 @@ public class DataFileServiceImpl implements DataFileService {
             String total = columns[8].trim();
             String advance = columns[9].trim();
 
+
+            Optional<Order> order = orderRepository.findById(Long.parseLong(idOrder));
+
+            if (order.isPresent()) {
+                throw new DuplicatedEntityException(String.format("La orden %s ya existe", idOrder));
+            }
+
             existsStores(idStore1, idStore2);
+
             Product productEntity = productRepository.findById(product)
                     .orElseThrow(() -> new EntityNotFoundException(String.format("El producto con código %s no existe en el sistema", product)));
             ShippingTime shippingTimeEntity = shippingTimeRepository.findById(new ShippingTimeId(idStore1, idStore2))
                     .orElseThrow(() -> new EntityNotFoundException(String.format("No existe un tiempo de envío entre la tienda %s y %s", idStore1, idStore2)));
+            Customer customerEntity = customerRepository.findByNit(customer)
+                    .orElseThrow(() -> new EntityNotFoundException(String.format("El usuario con NIT %s no existe en el sistema", customer)));
             if (!isValidDateFormat(date)) {
                 throw new DateFormatException(String.format("La fecha del envío debe estar en formato yyyy-mm-dd. Valor encontrado: %s", date));
             }
@@ -295,14 +351,46 @@ public class DataFileServiceImpl implements DataFileService {
             }
 
             int days = shippingTimeEntity.getTime();
+            DateTimeFormatter formatter = new DateTimeFormatterBuilder()
+                    .appendOptional(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"))
+                    .appendOptional(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+                    .toFormatter();
+
+            LocalDateTime departureDate = LocalDateTime.parse(date + " 00:00:00", formatter);
+            LocalDateTime entryDate = LocalDateTime.parse(addDaysToDate(date, days) + " 00:00:00", formatter);
+
+            System.out.println("xd");
 
             Order orderEntity = new Order();
             orderEntity.setIdOrder(Long.parseLong(idOrder));
             orderEntity.setIdStoreShipping(idStore1);
             orderEntity.setIdStoreReceive(idStore2);
-            orderEntity.setDateDeparture(LocalDateTime.parse(date));
-            orderEntity.setDateEntry(LocalDateTime.parse(addDaysToDate(date, days)));
+            orderEntity.setIdCustomer(customerEntity.getUserIdUser());
+            orderEntity.setDateDeparture(departureDate);
+            orderEntity.setDateEntry(entryDate);
+            orderEntity.setTotal(BigDecimal.valueOf(Double.parseDouble(total)));
+            orderEntity.setStatus("Route");
 
+            System.out.println("xd");
+
+            orderRepository.save(orderEntity);
+
+            PaymentOrder paymentOrder = new PaymentOrder();
+            paymentOrder.setOrder(orderEntity);
+            paymentOrder.setType("efectivo");
+            paymentOrder.setAmount(Double.parseDouble(advance));
+            paymentOrderRepository.save(paymentOrder);
+
+            OrderHasProductPK orderHasProductPK = new OrderHasProductPK();
+            orderHasProductPK.setOrderId(Long.parseLong(idOrder));
+            orderHasProductPK.setProductId(product);
+
+            OrderHasProduct orderHasProductEntity = new OrderHasProduct();
+            orderHasProductEntity.setQuantiy(Integer.parseInt(quantity));
+            orderHasProductEntity.setOrderHasProductPK(orderHasProductPK);
+            orderHasProductEntity.setProduct(productEntity);
+            orderHasProductEntity.setOrder(orderEntity);
+            orderHasProductRepository.save(orderHasProductEntity);
 
         }
     }
@@ -352,11 +440,15 @@ public class DataFileServiceImpl implements DataFileService {
     }
 
     private static String addDaysToDate(String date, int daysToAdd) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+        DateTimeFormatter formatter = new DateTimeFormatterBuilder()
+                .appendOptional(DateTimeFormatter.ofPattern("yyyy/MM/dd"))
+                .appendOptional(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                .toFormatter();
         LocalDate initialDate = LocalDate.parse(date, formatter);
         LocalDate finalDate = initialDate.plusDays(daysToAdd);
 
-        return finalDate.format(formatter);
+        return finalDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     }
+
 
 }

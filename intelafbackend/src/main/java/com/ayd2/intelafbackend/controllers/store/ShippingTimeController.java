@@ -4,6 +4,7 @@ import com.ayd2.intelafbackend.dto.store.CreateShippingTimeRequestDTO;
 import com.ayd2.intelafbackend.dto.store.EditShippingTimeRequestDTO;
 import com.ayd2.intelafbackend.dto.store.ShippingTimeResponseDTO;
 import com.ayd2.intelafbackend.entities.store.ShippingTime;
+import com.ayd2.intelafbackend.exceptions.DuplicatedEntityException;
 import com.ayd2.intelafbackend.exceptions.EntityNotFoundException;
 import com.ayd2.intelafbackend.services.ShippingTimeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +44,7 @@ public class ShippingTimeController {
     }
 
     @PostMapping
-    public ResponseEntity<ShippingTimeResponseDTO> createShippingTime(@RequestBody CreateShippingTimeRequestDTO newShippingTimne) throws EntityNotFoundException {
+    public ResponseEntity<ShippingTimeResponseDTO> createShippingTime(@RequestBody CreateShippingTimeRequestDTO newShippingTimne) throws EntityNotFoundException, DuplicatedEntityException {
         ShippingTimeResponseDTO responseDTO = shippingTimeService.createShippingTime(newShippingTimne);
 
         return ResponseEntity

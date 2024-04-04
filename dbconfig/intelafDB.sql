@@ -356,3 +356,7 @@ ENGINE = InnoDB;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+insert into `intelafdb`.`user` (`nit`, `name`, `phone`, `dpi`, `email`, `address`, `password`, `username`, `role`) values ('123456789', 'Juan', '12345678', '1234567890123', 'user1@example.com', '543 Plaza Trail', '$2a$04$064AdWzIBacAYtjauLY07ekMqA/IpbOwl75jGnSHJ6JpBNqVc/PJi', 'user1', 'ADMINISTRATOR');
+
+insert into `intelafdb`.`employee` (`id_user`, `role`) values (1, 'admin');

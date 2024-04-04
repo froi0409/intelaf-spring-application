@@ -24,4 +24,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     List<User> findAll();
 
+    Optional<User> findFirstByDpi(String dpi);
+
+
 }
