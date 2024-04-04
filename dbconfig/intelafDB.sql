@@ -169,11 +169,18 @@ CREATE TABLE IF NOT EXISTS `intelafdb`.`sale` (
   `date` DATETIME NULL,
   `total` DOUBLE NULL,
   `id_customer` INT NOT NULL,
+  `store_id_store` VARCHAR(10)  NULL,
   PRIMARY KEY (`id_sale`, `id_customer`),
   INDEX `fk_sale_customer1_idx` (`id_customer` ASC) VISIBLE,
+ INDEX `fk_sale_store_idx` (`store_id_store` ASC) VISIBLE,
   CONSTRAINT `fk_sale_customer1`
     FOREIGN KEY (`id_customer`)
     REFERENCES `intelafdb`.`customer` (`user_id_user`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_sale_store_idx`
+    FOREIGN KEY (`store_id_store`)
+    REFERENCES `intelafdb`.`store` (`id_store`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;

@@ -107,7 +107,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "INNER JOIN store ss ON (ss.id_store = o.id_store_shipping) " +
             "INNER JOIN store sr ON (sr.id_store = o.id_store_receive) " +
             "WHERE o.id_store_receive = :idStoreReceive " +
-            "AND DATE_ADD(o.date_departure, INTERVAL st.time DAY) = CURDATE()" +
+            "AND DATE_ADD(o.date_departure, INTERVAL st.time DAY) >= CURDATE()" +
             "AND o.status IN ('route', 'pending')"
             , nativeQuery = true)
     List<OrderInTimeStatusRouteProjection> reportInTimeWithPendingVerification(@Param("idStoreReceive") String idStoreReceive);
@@ -140,6 +140,20 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "AND o.status IN ( '"+ OrderStatusConstanst.ROUTE +"' )"
             , nativeQuery = true)
     List<OrderInTimeStatusRouteProjection> reportLeavingStoreInTransit(@Param("idStoreShipping") String idStoreShipping);
+
+    @Query("SELECT o.idOrder AS order_id, " +
+            "CONCAT(p.idProduct, ':', p.name, ' (', ohp.quantiy, ' units)') AS order_detail, " +
+            "o.total AS total, " +
+            "o.status AS status " +
+            "FROM Order o " +
+            "JOIN order_has_product ohp ON o.idOrder = ohp.order.idOrder " +
+            "JOIN product p ON ohp.product.idProduct = p.idProduct " +
+            "WHERE (o.status = 'Route' OR o.status = 'route' OR o.status = 'pending')" +
+            "AND o.idStoreReceive = :idStoreRecieve " +
+            "GROUP BY o.idOrder, p.idProduct, p.name, ohp.quantiy, o.total, o.status")
+    List<Object[]> reportOrdersNotArrivedAtStore(@Param("idStoreRecieve") String idStore);
+
+
 
     @Override
     Optional<Order> findById(Long id);

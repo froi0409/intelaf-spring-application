@@ -94,7 +94,9 @@ public class UserServiceImpl implements UserService {
         existingUser.setDpi(userRequestDTO.getDpi());
         existingUser.setEmail(userRequestDTO.getEmail());
         existingUser.setAddress(userRequestDTO.getAddress());
-        existingUser.setPassword(userRequestDTO.getPassword());
+        if (!userRequestDTO.getPassword().isEmpty()){
+            existingUser.setPassword(passwordEncoder.encode(userRequestDTO.getPassword()));
+        }
         existingUser.setUsername(userRequestDTO.getUsername());
 
         // Guardar y devolver el usuario actualizado

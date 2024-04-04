@@ -29,7 +29,6 @@ import org.springframework.web.bind.annotation.RestController;
  * @author waliray
  */
 @RestController
-@PreAuthorize("hasRole('EMPLOYEE')")
 @RequestMapping("/v1/products")
 public class ProductController {
     private ProductService productService;
@@ -40,6 +39,7 @@ public class ProductController {
     } 
     
     @PostMapping("/create-product")
+    @PreAuthorize("hasRole('EMPLOYEE')")
     public ResponseEntity<ProductResponseDTO> createProduct(@RequestBody ProductStoreRequestDTO newProduct) throws DuplicatedEntityException{
         ProductResponseDTO responseDTO = productService.createProduct(newProduct);
         
@@ -49,21 +49,25 @@ public class ProductController {
     }
     
     @GetMapping("/get-all-products")
+    @PreAuthorize("hasRole('EMPLOYEE') OR hasRole('CUSTOMER')")
     public ResponseEntity<List<ProductResponseDTO>> findAllProducts() {
         return ResponseEntity.ok(productService.findAll());
     }
     
     @GetMapping("/get-product-by-id/{id}")
+    @PreAuthorize("hasRole('EMPLOYEE') OR hasRole('CUSTOMER')")
     public ResponseEntity<ProductStoreResponseDTO> findProductById(@PathVariable("id") String id) throws EntityNotFoundException{
         return ResponseEntity.ok(productService.findProductById(id));
     }
     
     @GetMapping("/get-all-products-stock")
+    @PreAuthorize("hasRole('EMPLOYEE') OR hasRole('CUSTOMER')")
     public ResponseEntity<List<ProductStoreResponseDTO>> findAllProductsWithStock() {
         return ResponseEntity.ok(productService.findAllProductsWithStock());
     }
      
     @PutMapping("/update-product/{id}")
+    @PreAuthorize("hasRole('EMPLOYEE')")
     public ResponseEntity<ProductResponseDTO> updateProduct(@PathVariable("id") String id, @RequestBody ProductStoreRequestDTO updatedProduct) throws DuplicatedEntityException, EntityNotFoundException{
         ProductResponseDTO responseDTO = productService.updateProduct(id, updatedProduct);
         if (responseDTO != null) {

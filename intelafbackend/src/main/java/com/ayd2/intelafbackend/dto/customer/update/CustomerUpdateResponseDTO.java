@@ -16,7 +16,6 @@ public class CustomerUpdateResponseDTO {
     String dpi;
     String email;
     String address;
-    String password;
     String username;
 
     public CustomerUpdateResponseDTO(Customer customer){
@@ -28,7 +27,6 @@ public class CustomerUpdateResponseDTO {
         this.dpi = customer.getUser().getDpi();
         this.email = customer.getUser().getEmail();
         this.address = customer.getUser().getAddress();
-        this.password = customer.getUser().getPassword();
         this.username = customer.getUser().getUsername();
     }
 
