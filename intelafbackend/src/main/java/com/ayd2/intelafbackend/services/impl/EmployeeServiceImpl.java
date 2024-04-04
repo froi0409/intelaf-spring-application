@@ -109,7 +109,13 @@ public class EmployeeServiceImpl implements EmployeeService {
                 user.setEmail(updatedEmployee.getEmail());
                 user.setName(updatedEmployee.getName());
                 user.setNit(updatedEmployee.getNit());
-                user.setPassword(passwordEncoder.encode(updatedEmployee.getPassword()));
+                if (updatedEmployee.getPassword().equals("")) {
+
+                }else{
+                    user.setPassword(passwordEncoder.encode(updatedEmployee.getPassword()));
+                }
+                
+                
                 user.setPhone(updatedEmployee.getPhone());
 
                 user = userRepository.save(user);
