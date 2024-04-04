@@ -13,6 +13,7 @@ import com.ayd2.intelafbackend.dto.order.paymentorder.PaymentOrderRequestDTO;
 import com.ayd2.intelafbackend.dto.order.paymentorder.PaymentOrderResponseDTO;
 import com.ayd2.intelafbackend.dto.order.reports.OrderReportResponseDTO;
 import com.ayd2.intelafbackend.dto.order.report.OrderInTimeStatusRouteResponseDTO;
+import com.ayd2.intelafbackend.dto.order.reports.OrderReportResponseDTO;
 import com.ayd2.intelafbackend.entities.orders.Order;
 import com.ayd2.intelafbackend.entities.store.Store;
 import com.ayd2.intelafbackend.entities.users.Customer;
@@ -93,7 +94,7 @@ public class OrderServiceImpl implements OrderService {
         //Add payment order
         for (PaymentOrderRequestDTO paymentOrderRequestDTO : orderRequestDTO.getPayments()) {
             paymentOrderService.registerPayment(newOrder, paymentOrderRequestDTO);
-            if (paymentOrderRequestDTO.getType().equalsIgnoreCase("credit")) {
+            if (paymentOrderRequestDTO.getType().equalsIgnoreCase(PaymentConstants.CREDIT)) {
                 usedCredit = usedCredit.add(BigDecimal.valueOf(paymentOrderRequestDTO.getAmount()));
 
             }
@@ -169,13 +170,21 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<TrakingOrderResponseDTO> findOrdersByCustomerId(Long idCustomer) throws EntityNotFoundException {
+    public List<TrakingOrderResponseDTO> findOrdersByCustomerId(Long idCustomer) throws EntityNotFoundException{
         return orderRepository.findOrdersByCustomerId(idCustomer)
                 .stream()
                 .map(TrakingOrderResponseDTO :: new)
                 .collect(Collectors.toList());
     }
-    
+
+    @Override
+    public List<TrakingOrderResponseDTO> findOrdersByCustomerUsername(String userUsername) throws EntityNotFoundException{
+        return orderRepository.findOrdersByCustomerUsername(userUsername)
+                .stream()
+                .map(TrakingOrderResponseDTO :: new)
+                .collect(Collectors.toList());
+    }
+
     @Override
     public List<OrderReportResponseDTO> orderByIdCustomer(Long idCustomer){
         List<OrderReportResponseDTO> orders = new ArrayList<OrderReportResponseDTO>();
@@ -186,18 +195,17 @@ public class OrderServiceImpl implements OrderService {
                 paymentOrderProjections = paymentOrderService.findPaymentOrdersByOrderId(orderByCustomerProjection.getId_order());
                 List<OrderHasProductResponseDTO> orderHasProductProjections = orderHasProductService.findProductsOrderByIdOrder(orderByCustomerProjection.getId_order());
                 OrderReportResponseDTO newOrder = new OrderReportResponseDTO(orderByCustomerProjection,orderHasProductProjections,paymentOrderProjections);
-                
+
                 orders.add(newOrder);
             } catch (EntityNotFoundException ex) {
                 Logger.getLogger(OrderServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
-            
+
+
         }
-        
+
         return orders;
     }
-
 
     @Override
     public List<OrderInTimeStatusRouteResponseDTO> reportInTimeWithPendingVerification(String idStoreReceive) throws EntityNotFoundException{
@@ -222,5 +230,6 @@ public class OrderServiceImpl implements OrderService {
                 .map(OrderInTimeStatusRouteResponseDTO :: new)
                 .collect(Collectors.toList());
     }
+
 
 }
