@@ -8,6 +8,7 @@ import com.ayd2.intelafbackend.dto.employee.EmployeeRequestDTO;
 import com.ayd2.intelafbackend.dto.employee.EmployeeResponseDTO;
 import com.ayd2.intelafbackend.entities.users.Employee;
 import com.ayd2.intelafbackend.entities.users.User;
+import com.ayd2.intelafbackend.enums.user.Role;
 import com.ayd2.intelafbackend.repositories.EmployeeRepository;
 import com.ayd2.intelafbackend.repositories.ProductRepository;
 import com.ayd2.intelafbackend.repositories.UserRepository;
@@ -67,6 +68,12 @@ public class EmployeeServiceImpl implements EmployeeService {
         newUserEntity.setPassword(newEmployee.getPassword());
         newUserEntity.setPhone(newEmployee.getPhone());
         newUserEntity.setUsername(newEmployee.getUsername());
+
+        if (newEmployee.getRole().startsWith("e") || newEmployee.getRole().startsWith("E")) {
+            newUserEntity.setRole(Role.EMPLOYEE);
+        } else if (newEmployee.getRole().startsWith("a") || newEmployee.getRole().startsWith("A")) {
+            newUserEntity.setRole(Role.ADMINISTRATOR);
+        }
 
         newUserEntity = this.userRepository.save(newUserEntity);
 

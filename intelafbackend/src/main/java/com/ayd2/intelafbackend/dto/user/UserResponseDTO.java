@@ -2,6 +2,7 @@ package com.ayd2.intelafbackend.dto.user;
 
 
 import com.ayd2.intelafbackend.entities.users.User;
+import com.ayd2.intelafbackend.enums.user.Role;
 import jakarta.persistence.Column;
 import lombok.NoArgsConstructor;
 import lombok.Value;
@@ -17,6 +18,7 @@ public class UserResponseDTO {
     String email;
     String address;
     String username;
+    Role role;
 
     public UserResponseDTO(User user){
         this.idUser = user.getIdUser();
@@ -27,5 +29,6 @@ public class UserResponseDTO {
         this.email = user.getEmail();
         this.address = user.getAddress();
         this.username = user.getUsername();
+        this.role = user.getRole();
     }
 }

@@ -10,12 +10,14 @@ import com.ayd2.intelafbackend.services.StoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/v1/store")
+@PreAuthorize("hasRole('EMPLOYEE')")
 //@CrossOrigin(origins = "http://localhost:3000")
 public class StoreController {
 

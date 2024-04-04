@@ -86,7 +86,7 @@ DROP TABLE IF EXISTS `intelafdb`.`user` ;
 
 CREATE TABLE IF NOT EXISTS `intelafdb`.`user` (
   `id_user` INT NOT NULL AUTO_INCREMENT,
-  `nit` VARCHAR(9) NOT NULL,
+  `nit` VARCHAR(9) NULL,
   `name` VARCHAR(100) NOT NULL,
   `phone` VARCHAR(8) NOT NULL,
   `dpi` VARCHAR(13) NULL,
@@ -94,6 +94,8 @@ CREATE TABLE IF NOT EXISTS `intelafdb`.`user` (
   `address` VARCHAR(100) NULL,
   `password` VARCHAR(100) NOT NULL,
   `username` VARCHAR(45) NOT NULL,
+  `token_expiration` DATETIME,
+  `role` ENUM('ADMINISTRATOR', 'EMPLOYEE', 'CUSTOMER'),
   PRIMARY KEY (`id_user`))
 ENGINE = InnoDB;
 
