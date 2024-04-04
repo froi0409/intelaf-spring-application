@@ -6,6 +6,7 @@ import com.ayd2.intelafbackend.dto.store.ShippingTimeResponseDTO;
 import com.ayd2.intelafbackend.entities.store.ShippingTime;
 import com.ayd2.intelafbackend.entities.store.ShippingTimeId;
 import com.ayd2.intelafbackend.entities.store.Store;
+import com.ayd2.intelafbackend.exceptions.DuplicatedEntityException;
 import com.ayd2.intelafbackend.exceptions.EntityNotFoundException;
 import com.ayd2.intelafbackend.repositories.ShippingTimeRepository;
 import com.ayd2.intelafbackend.repositories.StoreRepository;

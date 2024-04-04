@@ -4,9 +4,8 @@
  */
 package com.ayd2.intelafbackend.controllers;
 
-import com.ayd2.intelafbackend.dto.order.deliveryorder.OrderAllFeatureResponseDTO;
+import com.ayd2.intelafbackend.dto.order.reports.OrderDetail;
 import com.ayd2.intelafbackend.dto.order.reports.OrderReportResponseDTO;
-import com.ayd2.intelafbackend.dto.products.ProductResponseDTO;
 import com.ayd2.intelafbackend.dto.products.reports.ProductBestSellingResponseDTO;
 import com.ayd2.intelafbackend.dto.sale.reports.SaleByIdCustomerResponseDTO;
 import com.ayd2.intelafbackend.exceptions.EntityNotFoundException;
@@ -15,6 +14,7 @@ import com.ayd2.intelafbackend.services.ProductService;
 import com.ayd2.intelafbackend.services.SaleService;
 import java.time.LocalDate;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -59,6 +59,11 @@ public class ReportsController {
             @RequestParam("date2") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date2) {
         
         return ResponseEntity.ok(productService.getBestSellingProducts(date1, date2));
+    }
+
+    @GetMapping("/orders-that-will-arrive/{idStore}")
+    public ResponseEntity<List<OrderDetail>> getOrdersThatWillArrive(@PathVariable String idStore) throws EntityNotFoundException {
+        return ResponseEntity.ok(orderService.reportPackagesThatWillArriveAtAStore(idStore));
     }
     
     

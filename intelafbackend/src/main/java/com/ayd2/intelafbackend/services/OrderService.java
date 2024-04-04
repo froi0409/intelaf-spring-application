@@ -6,7 +6,8 @@ import com.ayd2.intelafbackend.dto.order.OrderResponseDTO;
 import com.ayd2.intelafbackend.dto.order.customer.TrakingOrderResponseDTO;
 import com.ayd2.intelafbackend.dto.order.deliveryorder.DeliveryOrderResponseDTO;
 import com.ayd2.intelafbackend.dto.order.deliveryorder.OrderAllFeatureResponseDTO;
-import com.ayd2.intelafbackend.dto.order.report.OrderInTimeStatusRouteResponseDTO;
+import com.ayd2.intelafbackend.dto.order.reports.OrderDetail;
+import com.ayd2.intelafbackend.dto.order.reports.OrderInTimeStatusRouteResponseDTO;
 import com.ayd2.intelafbackend.dto.order.reports.OrderReportResponseDTO;
 import com.ayd2.intelafbackend.exceptions.EntityNotFoundException;
 import com.ayd2.intelafbackend.exceptions.NotAcceptableException;
@@ -39,4 +40,6 @@ public interface OrderService {
     List<OrderInTimeStatusRouteResponseDTO> reportOverdueArrivingStore(String idStoreReceive) throws EntityNotFoundException;
 
     List<OrderInTimeStatusRouteResponseDTO> reportLeavingStoreInTransit(String idStoreReceive) throws EntityNotFoundException;
+
+    List<OrderDetail> reportPackagesThatWillArriveAtAStore(String idStore) throws EntityNotFoundException;
 }

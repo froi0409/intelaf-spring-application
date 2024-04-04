@@ -6,7 +6,7 @@ import com.ayd2.intelafbackend.dto.order.OrderResponseDTO;
 import com.ayd2.intelafbackend.dto.order.customer.TrakingOrderResponseDTO;
 import com.ayd2.intelafbackend.dto.order.deliveryorder.DeliveryOrderResponseDTO;
 import com.ayd2.intelafbackend.dto.order.deliveryorder.OrderAllFeatureResponseDTO;
-import com.ayd2.intelafbackend.dto.order.report.OrderInTimeStatusRouteResponseDTO;
+import com.ayd2.intelafbackend.dto.order.reports.OrderInTimeStatusRouteResponseDTO;
 import com.ayd2.intelafbackend.exceptions.EntityNotFoundException;
 import com.ayd2.intelafbackend.exceptions.NotAcceptableException;
 import com.ayd2.intelafbackend.services.OrderService;

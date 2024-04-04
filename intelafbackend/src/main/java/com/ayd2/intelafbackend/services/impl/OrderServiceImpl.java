@@ -11,9 +11,9 @@ import com.ayd2.intelafbackend.dto.order.orderhasproducts.OrderHasProductRequest
 import com.ayd2.intelafbackend.dto.order.orderhasproducts.OrderHasProductResponseDTO;
 import com.ayd2.intelafbackend.dto.order.paymentorder.PaymentOrderRequestDTO;
 import com.ayd2.intelafbackend.dto.order.paymentorder.PaymentOrderResponseDTO;
+import com.ayd2.intelafbackend.dto.order.reports.OrderDetail;
 import com.ayd2.intelafbackend.dto.order.reports.OrderReportResponseDTO;
-import com.ayd2.intelafbackend.dto.order.report.OrderInTimeStatusRouteResponseDTO;
-import com.ayd2.intelafbackend.dto.order.reports.OrderReportResponseDTO;
+import com.ayd2.intelafbackend.dto.order.reports.OrderInTimeStatusRouteResponseDTO;
 import com.ayd2.intelafbackend.entities.orders.Order;
 import com.ayd2.intelafbackend.entities.store.Store;
 import com.ayd2.intelafbackend.entities.users.Customer;
@@ -230,6 +230,27 @@ public class OrderServiceImpl implements OrderService {
                 .map(OrderInTimeStatusRouteResponseDTO :: new)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<OrderDetail> reportPackagesThatWillArriveAtAStore(String idStore) throws EntityNotFoundException {
+        Store store = storeRepository.findById(idStore)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Store with id %s doesnt exists", idStore)));
+
+        List<Object[]> ordersNotArrived = orderRepository.reportOrdersNotArrivedAtStore(idStore);
+
+        List<OrderDetail> result = new ArrayList<>();
+        for (Object[] order : ordersNotArrived) {
+            OrderDetail orderDetail = new OrderDetail();
+            orderDetail.setOrderId((Long) order[0]);
+            orderDetail.setProductDescription((String) order[1]);
+            orderDetail.setTotal(Double.parseDouble(order[2].toString()));
+            orderDetail.setStatus((String) order[3]);
+            result.add(orderDetail);
+        }
+
+        return result;
+    }
+
 
 
 }
