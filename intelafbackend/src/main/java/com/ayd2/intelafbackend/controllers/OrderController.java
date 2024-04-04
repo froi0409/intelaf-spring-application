@@ -64,11 +64,6 @@ public class OrderController {
         return ResponseEntity.ok(orderService.findByIdWithEstimateDelivery(idOrder));
     }
 
-    @GetMapping("/find-order-customer-username/{userUsername}")
-    public ResponseEntity<List<TrakingOrderResponseDTO>> findOrdersByCustomerId(@PathVariable String userUsername) throws EntityNotFoundException {
-        return ResponseEntity.ok(orderService.findOrdersByCustomerId(userUsername));
-    }
-
     @GetMapping("/reportInTimeWithPendingVerification/{idStoreReceive}")
     public ResponseEntity<List<OrderInTimeStatusRouteResponseDTO>> reportInTimeWithPendingVerification(@PathVariable String idStoreReceive) throws EntityNotFoundException {
         return ResponseEntity.ok(orderService.reportInTimeWithPendingVerification(idStoreReceive));

@@ -31,7 +31,6 @@ public interface OrderService {
     List<TrakingOrderResponseDTO> findOrdersByCustomerId(Long idCustomer) throws EntityNotFoundException;
     
     List<OrderReportResponseDTO> orderByIdCustomer(Long idCustomer);
-    List<TrakingOrderResponseDTO> findOrdersByCustomerId(String userUsername) throws EntityNotFoundException;
 
     List<OrderInTimeStatusRouteResponseDTO> reportInTimeWithPendingVerification(String idStoreReceive) throws EntityNotFoundException;
 

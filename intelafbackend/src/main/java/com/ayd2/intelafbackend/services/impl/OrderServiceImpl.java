@@ -169,8 +169,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<TrakingOrderResponseDTO> findOrdersByCustomerId(String userUsername) throws EntityNotFoundException{
-        return orderRepository.findOrdersByCustomerId(userUsername)
+    public List<TrakingOrderResponseDTO> findOrdersByCustomerId(Long idCustomer) throws EntityNotFoundException {
+        return orderRepository.findOrdersByCustomerId(idCustomer)
                 .stream()
                 .map(TrakingOrderResponseDTO :: new)
                 .collect(Collectors.toList());
@@ -197,6 +197,7 @@ public class OrderServiceImpl implements OrderService {
         
         return orders;
     }
+
 
     @Override
     public List<OrderInTimeStatusRouteResponseDTO> reportInTimeWithPendingVerification(String idStoreReceive) throws EntityNotFoundException{
