@@ -6,7 +6,7 @@ package com.ayd2.intelafbackend.controllers;
 
 import com.ayd2.intelafbackend.dto.order.reports.OrderDetail;
 import com.ayd2.intelafbackend.dto.order.deliveryorder.OrderAllFeatureResponseDTO;
-import com.ayd2.intelafbackend.dto.order.report.OrderInTimeStatusRouteResponseDTO;
+import com.ayd2.intelafbackend.dto.order.reports.OrderInTimeStatusRouteResponseDTO;
 import com.ayd2.intelafbackend.dto.order.reports.OrderReportResponseDTO;
 import com.ayd2.intelafbackend.dto.products.ProductResponseDTO;
 import com.ayd2.intelafbackend.dto.products.reports.ProductBestSellingResponseDTO;
