@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 /**
@@ -31,11 +32,13 @@ import org.springframework.stereotype.Service;
 public class EmployeeServiceImpl implements EmployeeService {
     private EmployeeRepository employeeRepository;
     private final UserRepository userRepository;
+    private PasswordEncoder passwordEncoder;
     
     @Autowired
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository,UserRepository userRepository) {
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository,UserRepository userRepository,PasswordEncoder passwordEncoder) {
         this.employeeRepository = employeeRepository;
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
     
     @Override
@@ -65,7 +68,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         newUserEntity.setEmail(newEmployee.getEmail());
         newUserEntity.setName(newEmployee.getName());
         newUserEntity.setNit(newEmployee.getNit());
-        newUserEntity.setPassword(newEmployee.getPassword());
+        newUserEntity.setPassword(passwordEncoder.encode(newEmployee.getPassword()));
         newUserEntity.setPhone(newEmployee.getPhone());
         newUserEntity.setUsername(newEmployee.getUsername());
 
@@ -106,7 +109,13 @@ public class EmployeeServiceImpl implements EmployeeService {
                 user.setEmail(updatedEmployee.getEmail());
                 user.setName(updatedEmployee.getName());
                 user.setNit(updatedEmployee.getNit());
-                user.setPassword(updatedEmployee.getPassword());
+                if (updatedEmployee.getPassword().equals("")) {
+
+                }else{
+                    user.setPassword(passwordEncoder.encode(updatedEmployee.getPassword()));
+                }
+                
+                
                 user.setPhone(updatedEmployee.getPhone());
 
                 user = userRepository.save(user);
