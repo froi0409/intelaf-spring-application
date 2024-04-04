@@ -7,6 +7,7 @@ import com.ayd2.intelafbackend.dto.order.customer.TrakingOrderResponseDTO;
 import com.ayd2.intelafbackend.dto.order.deliveryorder.DeliveryOrderResponseDTO;
 import com.ayd2.intelafbackend.dto.order.deliveryorder.OrderAllFeatureResponseDTO;
 import com.ayd2.intelafbackend.dto.order.report.OrderInTimeStatusRouteResponseDTO;
+import com.ayd2.intelafbackend.dto.order.reports.OrderReportResponseDTO;
 import com.ayd2.intelafbackend.exceptions.EntityNotFoundException;
 import com.ayd2.intelafbackend.exceptions.NotAcceptableException;
 
@@ -26,6 +27,10 @@ public interface OrderService {
     OrderResponseDTO findById(Long idOrder) throws EntityNotFoundException;
 
     OrderAllFeatureResponseDTO findByIdWithEstimateDelivery(Long idOrder) throws EntityNotFoundException;
+
+    List<TrakingOrderResponseDTO> findOrdersByCustomerId(Long idCustomer) throws EntityNotFoundException;
+
+    List<OrderReportResponseDTO> orderByIdCustomer(Long idCustomer);
 
     List<TrakingOrderResponseDTO> findOrdersByCustomerUsername(String userUsername) throws EntityNotFoundException;
 

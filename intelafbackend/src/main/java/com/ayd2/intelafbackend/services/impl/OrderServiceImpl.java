@@ -12,12 +12,14 @@ import com.ayd2.intelafbackend.dto.order.orderhasproducts.OrderHasProductRespons
 import com.ayd2.intelafbackend.dto.order.paymentorder.PaymentOrderRequestDTO;
 import com.ayd2.intelafbackend.dto.order.paymentorder.PaymentOrderResponseDTO;
 import com.ayd2.intelafbackend.dto.order.report.OrderInTimeStatusRouteResponseDTO;
+import com.ayd2.intelafbackend.dto.order.reports.OrderReportResponseDTO;
 import com.ayd2.intelafbackend.entities.orders.Order;
 import com.ayd2.intelafbackend.entities.store.Store;
 import com.ayd2.intelafbackend.entities.users.Customer;
 import com.ayd2.intelafbackend.exceptions.EntityNotFoundException;
 import com.ayd2.intelafbackend.exceptions.NotAcceptableException;
 import com.ayd2.intelafbackend.projectioninterface.order.DeliveryOrderProjection;
+import com.ayd2.intelafbackend.projectioninterface.order.reports.OrderByCustomerProjection;
 import com.ayd2.intelafbackend.repositories.CustomerRepository;
 import com.ayd2.intelafbackend.repositories.OrderRepository;
 import com.ayd2.intelafbackend.repositories.StoreRepository;
@@ -29,6 +31,8 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @Service
@@ -165,11 +169,41 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public List<TrakingOrderResponseDTO> findOrdersByCustomerId(Long idCustomer) throws EntityNotFoundException{
+        return orderRepository.findOrdersByCustomerId(idCustomer)
+                .stream()
+                .map(TrakingOrderResponseDTO :: new)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<TrakingOrderResponseDTO> findOrdersByCustomerUsername(String userUsername) throws EntityNotFoundException{
         return orderRepository.findOrdersByCustomerUsername(userUsername)
                 .stream()
                 .map(TrakingOrderResponseDTO :: new)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<OrderReportResponseDTO> orderByIdCustomer(Long idCustomer){
+        List<OrderReportResponseDTO> orders = new ArrayList<OrderReportResponseDTO>();
+        List<OrderByCustomerProjection> ordersProjection = orderRepository.findAllOrdersByCustomerId(idCustomer);
+        for (OrderByCustomerProjection orderByCustomerProjection : ordersProjection) {
+            List<PaymentOrderResponseDTO> paymentOrderProjections;
+            try {
+                paymentOrderProjections = paymentOrderService.findPaymentOrdersByOrderId(orderByCustomerProjection.getId_order());
+                List<OrderHasProductResponseDTO> orderHasProductProjections = orderHasProductService.findProductsOrderByIdOrder(orderByCustomerProjection.getId_order());
+                OrderReportResponseDTO newOrder = new OrderReportResponseDTO(orderByCustomerProjection,orderHasProductProjections,paymentOrderProjections);
+
+                orders.add(newOrder);
+            } catch (EntityNotFoundException ex) {
+                Logger.getLogger(OrderServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+
+        }
+
+        return orders;
     }
 
     @Override
@@ -195,5 +229,6 @@ public class OrderServiceImpl implements OrderService {
                 .map(OrderInTimeStatusRouteResponseDTO :: new)
                 .collect(Collectors.toList());
     }
+
 
 }
