@@ -10,6 +10,7 @@ import com.ayd2.intelafbackend.dto.order.orderhasproducts.OrderHasProductRequest
 import com.ayd2.intelafbackend.dto.order.orderhasproducts.OrderHasProductResponseDTO;
 import com.ayd2.intelafbackend.dto.order.paymentorder.PaymentOrderRequestDTO;
 import com.ayd2.intelafbackend.dto.order.paymentorder.PaymentOrderResponseDTO;
+import com.ayd2.intelafbackend.dto.order.report.OrderInTimeStatusRouteResponseDTO;
 import com.ayd2.intelafbackend.entities.orders.Order;
 import com.ayd2.intelafbackend.entities.store.Store;
 import com.ayd2.intelafbackend.entities.users.Customer;
@@ -163,10 +164,34 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<TrakingOrderResponseDTO> findOrdersByCustomerId(Long idCustomer) throws EntityNotFoundException{
-        return orderRepository.findOrdersByCustomerId(idCustomer)
+    public List<TrakingOrderResponseDTO> findOrdersByCustomerId(String userUsername) throws EntityNotFoundException{
+        return orderRepository.findOrdersByCustomerId(userUsername)
                 .stream()
                 .map(TrakingOrderResponseDTO :: new)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<OrderInTimeStatusRouteResponseDTO> reportInTimeWithPendingVerification(String idStoreReceive) throws EntityNotFoundException{
+        return orderRepository.reportInTimeWithPendingVerification(idStoreReceive)
+                .stream()
+                .map(OrderInTimeStatusRouteResponseDTO :: new)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<OrderInTimeStatusRouteResponseDTO> reportOverdueArrivingStore(String idStoreReceive) throws EntityNotFoundException{
+        return orderRepository.reportOverdueArrivingStore(idStoreReceive)
+                .stream()
+                .map(OrderInTimeStatusRouteResponseDTO :: new)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<OrderInTimeStatusRouteResponseDTO> reportLeavingStoreInTransit(String idStoreShipping) throws EntityNotFoundException{
+        return orderRepository.reportLeavingStoreInTransit(idStoreShipping)
+                .stream()
+                .map(OrderInTimeStatusRouteResponseDTO :: new)
                 .collect(Collectors.toList());
     }
 
